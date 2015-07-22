@@ -14,8 +14,9 @@ import org.apache.log4j.Logger
 
 import java.lang.reflect.InvocationTargetException
 
-@Log4j
+
 public class ValidationEngine {
+    private static Logger log = Logger.getLogger(ValidationEngine);
     ValComponentBase validationObject
     List<ValidationMethod> validationMethods  // taken from validationObject
     ValidationMethod currentValidationMethod

@@ -7,12 +7,14 @@ import gov.nist.hit.ds.simSupport.transaction.Transaction
 import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 2/3/15.
  */
-@Log4j
+
 class Pnr implements Transaction {
+    private static Logger log = Logger.getLogger(Pnr);
     SimHandle simHandle
 
     @Override

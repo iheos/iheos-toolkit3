@@ -6,12 +6,14 @@ import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.repository.shared.ValidationLevel
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bill on 4/15/14.
  */
-@Log4j
+
 class Event {
+    private static Logger log = Logger.getLogger(Event);
     InOutMessages inOut = new InOutMessages()
     Artifacts artifacts = new Artifacts();
     Set<AssertionGroup> allAssetionGroups = []

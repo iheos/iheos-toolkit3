@@ -110,7 +110,11 @@ public class Installation {
 			} else {
 				throw new InitializationFailedException("External Cache directory <" + externalCache + "> does not exist; it is specified by the following toolkit.properties file: <" + getToolkitPropertiesFile().toString() + ">. If the application is running in a development environment, please edit the toolkit.properties file in the src/main/resources instead of the path shown in the previous statement.");
 			}
-			initializeRepository();
+
+        // Initialize V2 view of External Cache
+        gov.nist.toolkit.installation.Installation.installation().externalCache(externalCache);
+
+        initializeRepository();
 			initializeEnvironments();
 	}
 

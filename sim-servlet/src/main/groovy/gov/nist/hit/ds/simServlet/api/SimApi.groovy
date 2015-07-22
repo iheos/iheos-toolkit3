@@ -10,13 +10,15 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * API used by REST calls
  * Created by bmajur on 10/23/14.
  */
-@Log4j
+
 class SimApi {
+    private static Logger log = Logger.getLogger(SimApi);
 
     static SimHandle createServer(String actorTypeName, String username, SimId simId) {
         SimUtils.create(actorTypeName, simId, username)

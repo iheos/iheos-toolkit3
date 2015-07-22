@@ -11,13 +11,15 @@ import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 7/5/14.
  */
 
-@Log4j
+
 class SimHandle {
+    private static Logger log = Logger.getLogger(SimHandle);
     SimId simId
     Asset simAsset
     Asset siteAsset

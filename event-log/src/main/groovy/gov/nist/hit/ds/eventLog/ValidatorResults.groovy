@@ -5,6 +5,7 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionGroupDAO
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
 import gov.nist.hit.ds.repository.api.Asset
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 12/6/14.
@@ -16,8 +17,9 @@ import groovy.util.logging.Log4j
 // the state of the Event. The class definition and helper functions
 // exist to manage that stack.
 
-@Log4j
+
 class ValidatorResults {
+    private static Logger log = Logger.getLogger(ValidatorResults);
     enum FlushStatus { NoForce, Force }
     AssertionGroupDAO aDAO
     AssertionGroup assertionGroup = new AssertionGroup()

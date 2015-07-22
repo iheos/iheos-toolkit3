@@ -12,8 +12,9 @@ import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 import org.apache.axiom.om.OMNamespace
 
-@Log4j
+
 public class SoapMessageParser extends ValComponentBase {
+    private static Logger log = Logger.getLogger(SoapMessageParser);
 	String soapNamespaceName = "http://www.w3.org/2003/05/soap-envelope";
     String xmlMessage
     OMElement xml

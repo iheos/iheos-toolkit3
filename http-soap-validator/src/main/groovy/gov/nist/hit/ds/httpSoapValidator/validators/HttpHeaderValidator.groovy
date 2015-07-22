@@ -14,8 +14,9 @@ import groovy.util.logging.Log4j
  * @author bill
  *   
  */
-@Log4j
+
 public class HttpHeaderValidator extends ValComponentBase {
+    private static Logger log = Logger.getLogger(HttpHeaderValidator);
 	String header = null;
 	byte[] body;
 	HttpParserBa httpParser = null;
