@@ -1,5 +1,0 @@
-# simAssertions
-
-keyword=validators
-domain=asset
-description=simAssertions desc
