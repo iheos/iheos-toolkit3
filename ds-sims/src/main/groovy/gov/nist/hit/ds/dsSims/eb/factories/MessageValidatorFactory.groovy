@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.factories
 
-import gov.nist.hit.ds.dsSims.eb.topLevel.ValidatorManager
+import gov.nist.hit.ds.dsSims.eb.topLevel.ValidatorManagerV2
 import gov.nist.hit.ds.tkapis.validation.MessageValidator
 
 /**
@@ -8,5 +8,5 @@ import gov.nist.hit.ds.tkapis.validation.MessageValidator
  */
 class MessageValidatorFactory {
 
-    MessageValidator getMessageValidator() { return new ValidatorManager() }
+    MessageValidator getMessageValidator() { return new ValidatorManagerV2() }
 }
