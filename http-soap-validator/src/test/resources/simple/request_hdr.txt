@@ -1,5 +1,0 @@
-POST /xdstools2/sim/78807d84-76e3-4123-8238-d27fae5b39b9/reg/rb HTTP/1.1
-Content-Type: application/soap+xml; charset=UTF-8; action="urn:ihe:iti:2007:RegisterDocumentSet-b"
-User-Agent: Axis2
-Host: localhost:8888
-

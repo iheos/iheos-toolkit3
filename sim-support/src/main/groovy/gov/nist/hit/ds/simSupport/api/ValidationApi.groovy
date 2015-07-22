@@ -8,11 +8,14 @@ import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 12/4/14.
  */
-@Log4j
+
 class ValidationApi {
+    private static Logger log = Logger.getLogger(ValidationApi);
     def factory = new ActorTransactionTypeFactory()
 //    def config = new SimSystemConfig()
 

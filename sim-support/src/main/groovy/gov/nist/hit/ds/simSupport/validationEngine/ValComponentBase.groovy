@@ -13,6 +13,8 @@ import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * An abstract class that makes use of the SimComponent interface easier
  * by implementing most of the required methods leaving only the injectAll
@@ -26,8 +28,9 @@ import groovy.util.logging.Log4j
  */
 
 // TODO: Needs refactoring - non assert methods should be delegated
-@Log4j
+
 public abstract class ValComponentBase implements ValComponent {
+    private static Logger log = Logger.getLogger(ValComponentBase);
     public AssertionGroup ag;
     public Event event;
     String name;

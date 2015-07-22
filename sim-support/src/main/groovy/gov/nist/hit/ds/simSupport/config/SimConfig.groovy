@@ -4,6 +4,7 @@ import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
 import groovy.transform.ToString
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Definition for an actor simulator. This focuses on a single
@@ -12,9 +13,10 @@ import groovy.util.logging.Log4j
  * @author bill
  *
  */
-@Log4j
+
 @ToString(excludes="serialVersionUID, expires, isExpired, actorState")
 public class SimConfig {
+    private static Logger log = Logger.getLogger(SimConfig);
 	ActorType actorType;
 	List<TransactionSimConfigElement> transactions = new ArrayList<TransactionSimConfigElement>();
     EnvironmentAccess environmentAccess = null  // used only by source actor simulators

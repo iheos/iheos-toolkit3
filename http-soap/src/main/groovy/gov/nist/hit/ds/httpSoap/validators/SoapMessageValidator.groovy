@@ -10,9 +10,11 @@ import gov.nist.hit.ds.utilities.xml.XmlUtil
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 import org.apache.axiom.om.OMNamespace
+import org.apache.log4j.Logger
 
-@Log4j
+
 public class SoapMessageValidator extends ValComponentBase {
+    private static Logger log = Logger.getLogger(SoapMessageValidator);
 	String soapNamespaceName = "http://www.w3.org/2003/05/soap-envelope";
     String xmlMessage
     OMElement xml

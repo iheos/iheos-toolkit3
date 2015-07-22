@@ -7,11 +7,14 @@ import gov.nist.hit.ds.simSupport.simulator.SimIdentifier
 import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 6/6/14.
  */
-@Log4j
+
 class EndpointBuilder {
+    private static Logger log = Logger.getLogger(EndpointBuilder);
     String server
     String port
     String tlsPort

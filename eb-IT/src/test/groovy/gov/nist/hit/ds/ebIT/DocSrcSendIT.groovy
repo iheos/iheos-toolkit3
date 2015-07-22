@@ -24,8 +24,9 @@ import spock.lang.Specification
  *
  * Created by bmajur on 2/3/15.
  */
-@Log4j
+
 class DocSrcSendIT extends Specification {
+    private static Logger log = Logger.getLogger(DocSrcSendIT);
     def userName = 'Tester'
     def clientSimName = 'DocSrcSendTest'
     def clientSimId = new SimId(clientSimName)

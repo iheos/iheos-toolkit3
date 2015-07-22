@@ -2,12 +2,14 @@ package gov.nist.hit.ds.simSupport.config
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 //TODO: This is appropriate for a server.  Needs to be refactored into a
 // base class appropriate to all and a server and client classes
 
-@Log4j
+
 public class TransactionSimConfigElement extends AbstractTransactionSimConfigElement {
+    private static Logger log = Logger.getLogger(TransactionSimConfigElement);
     EndpointValue endpointValue;
     EndpointType endpointType;
 

@@ -19,11 +19,14 @@ import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 8/28/14.
  */
-@Log4j
+
 class ValidatorManager implements MessageValidator {
+    private static Logger log = Logger.getLogger(ValidatorManager);
     SimHandle simHandle
     String simId  = 'validation'
     String repositoryName  = 'ValidationRepo'

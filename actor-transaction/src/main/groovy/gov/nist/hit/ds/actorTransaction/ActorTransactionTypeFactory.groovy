@@ -2,12 +2,14 @@ package gov.nist.hit.ds.actorTransaction
 
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 5/7/14.
  */
-@Log4j
+
 class ActorTransactionTypeFactory {
+    static Logger log = Logger.getLogger(ActorTransactionTypeFactory.class);
     // TODO: these lookups are dangerous since they don't take direction into account
     // lookup through actorType instead
     static Map<String, TransactionType> transactionByName

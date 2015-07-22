@@ -3,11 +3,14 @@ package gov.nist.hit.ds.actorTransaction
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidActorTypeDefinitionException
 import groovy.transform.ToString
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * Created by bill on 4/16/14.
  */
-@Log4j
+
 class ActorType /* implements IsSerializable, Serializable */{
+    static Logger log = Logger.getLogger(ActorType.class);
     String name
     String shortName
     String actorSimFactoryClassName

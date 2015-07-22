@@ -5,14 +5,16 @@ import groovy.util.logging.Log4j
 import groovy.xml.StreamingMarkupBuilder
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
+import org.apache.log4j.Logger
 
 import static groovyx.net.http.ContentType.XML
 
 /**
  * Created by bmajur on 2/4/15.
  */
-@Log4j
+
 class CreateSimRest {
+    private static Logger log = Logger.getLogger(CreateSimRest);
 
     static String run(String config, String host, String port, String service, String username, String simid) {
         def returnvalue = null

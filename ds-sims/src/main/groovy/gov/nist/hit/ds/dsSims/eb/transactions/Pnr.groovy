@@ -21,14 +21,16 @@ import gov.nist.toolkit.valsupport.client.ValidationContext
 import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 9/24/14.
  */
 
 // TODO: test with MTOM and MTOM/XOP encoding
-@Log4j
+
 class Pnr implements Transaction {
+    private static Logger log = Logger.getLogger(Pnr);
     SimHandle simHandle
 
     def Pnr(SimHandle _simHamdle) { simHandle = _simHamdle}

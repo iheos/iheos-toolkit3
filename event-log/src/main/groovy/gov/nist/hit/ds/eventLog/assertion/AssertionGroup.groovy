@@ -1,10 +1,8 @@
 package gov.nist.hit.ds.eventLog.assertion
-
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
-import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 /**
  * Collection of Assertion outputs (execution status of assertion)
@@ -13,7 +11,7 @@ import org.apache.log4j.Logger
  * @author bmajur
  *
  */
-@Log4j
+
 public class AssertionGroup  {
     List<Assertion> assertions = []
     AssertionStatus worstStatus = AssertionStatus.SUCCESS;
@@ -24,7 +22,7 @@ public class AssertionGroup  {
                     // doesnt seem to work
     Asset asset = null   // this gets set when saved - changes behaviour from create to update
 
-    private static Logger logger = Logger.getLogger(AssertionGroup);
+    private static Logger log = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
 
     // Don't log any messages less severe than this setting
