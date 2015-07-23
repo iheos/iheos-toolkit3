@@ -36,7 +36,7 @@ class PnrRecipientV2Test extends Specification {
 </ActorsTransactions>
 '''
     def simId
-    def repoName = 'PnrRecipientTest'
+    def repoName = 'PnrRecipientTestx'
     def endpoint = new Endpoint('http://localhost:8080/xdstools3/sim/1234/docrec/prb')
     File repoDataDir
     RepositorySource repoSource

@@ -18,7 +18,7 @@ import spock.lang.Specification
 /**
  * Created by bmajur on 9/24/14.
  */
-class PnrRecipientTest extends Specification {
+class PnrRecipientTestx extends Specification {
     static String config = '''
 <ActorsTransactions>
     <transaction name="Provide and Register" id="prb" code="prb">
@@ -34,7 +34,7 @@ class PnrRecipientTest extends Specification {
 </ActorsTransactions>
 '''
     def simId
-    def repoName = 'PnrRecipientTest'
+    def repoName = 'PnrRecipientTestx'
     def endpoint = new Endpoint('http://localhost:8080/xdstools3/sim/1234/docrec/prb')
     File repoDataDir
     RepositorySource repoSource
