@@ -4,6 +4,6 @@
   <inherits name='gov.nist.hit.ds.logBrowser.logBrowser' />
 
   <!-- Specify the path to any remote services.                   -->
-  <servlet path="/logBrowser/greet" class="gov.nist.hit.ds.logBrowser.server.GreetingServiceImpl" />
+  <servlet path="/browser/greet" class="gov.nist.hit.ds.logBrowser.server.GreetingServiceImpl" />
 
 </module>

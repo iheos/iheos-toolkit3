@@ -893,6 +893,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                 List<AssetNode> artifacts = child.getChildren();
 
                 for (AssetNode artifact : artifacts) {
+                    if (artifact!=null) {
                     logger.info("artifact=" + artifact.getDisplayName() + " type="+ artifact.getType()); /*
                     [ERROR] Sep 09, 2014 4:38:30 PM gov.nist.hit.ds.repository.rpc.presentation.PresentationData validateMessage
 [ERROR] INFO: artifact=Request type=reqType
@@ -905,6 +906,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                             messageBody = an.getRawContent();
                         }
                     }
+                  }
                 }
                 logger.info("hdr sz: " + messageHeader.length() + " body sz: " + ((messageBody==null)?"null": messageBody.length));
                 ValidateMessageResponse valMessageResponse = null;
