@@ -12,6 +12,7 @@ import gov.nist.hit.ds.xdstools3.client.util.eventBus.CloseOtherTabsEvent;
 
 /**
  * Structure for closeable tabs
+ * Usage: "setPane" to set the contents of the tab
  */
 public abstract class GenericCloseableTab extends GenericTab {
     Menu tabMenu = new Menu();

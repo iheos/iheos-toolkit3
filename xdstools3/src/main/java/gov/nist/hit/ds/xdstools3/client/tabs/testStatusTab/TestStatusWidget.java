@@ -22,7 +22,7 @@ public class TestStatusWidget extends SectionStack {
         setHeight(230);
 
         // Tests statistics header bar
-        String title = "<b>Tests&nbsp&nbsp&nbspRun:&nbsp&nbsp&nbsp15/26&nbsp&nbsp&nbspFailed: 4/26    Passed: 11/26 (42%)</b>";
+        String title = "<b>Tests Run: 15/26" + "&nbsp&nbsp&nbsp&nbsp" + "Failed: " + "4/26" + "&nbsp&nbsp&nbsp&nbsp" + "Passed: 11/26 (42%)</b>";
         SectionStackSection statsSection = new SectionStackSection(title);
         statsSection.setCanCollapse(false);
         statsSection.setExpanded(true);
