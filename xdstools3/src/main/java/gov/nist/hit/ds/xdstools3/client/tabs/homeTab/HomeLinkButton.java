@@ -31,6 +31,11 @@ public class HomeLinkButton extends IButton {
         bindUI();
     }
 
+    /**
+     * Opens a given tab after a click on the corresponding link on the Home page
+     * NB. syntax before TabPlaces was:
+     * Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
+     */
     private void bindUI() {
         // go to a new TabPlace on home's button click
         addClickHandler(new ClickHandler() {
@@ -38,7 +43,6 @@ public class HomeLinkButton extends IButton {
                 // FIXME unsafe code if refactored
                 if (title == "Find Documents")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsTabCode()));
-//                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
                 else if (title == "MPQ Find Documents")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMpqFindDocumentsTabCode()));
                 else if (title == "Message Validator")
@@ -81,6 +85,8 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMhdtoXdsConverterTabCode()));
                 else if (title == "Query - Retrieve - Submit")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getQRSCombinedTabCode()));
+                else if (title == "Tests Overview")
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getTestsOverviewTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

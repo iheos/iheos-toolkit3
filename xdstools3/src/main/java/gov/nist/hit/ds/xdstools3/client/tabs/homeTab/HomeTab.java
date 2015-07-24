@@ -14,6 +14,10 @@ public class HomeTab extends GenericTab {
         setPane(createContents());
     }
 
+    /**
+     * Usage: homebox.addItem(String Tab_Title, boolean isUnderConstruction)
+     * @return links to be displayed on the Home Tab
+     */
     protected HStack createContents(){
 
         HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
@@ -35,6 +39,7 @@ public class HomeTab extends GenericTab {
         tools.addItem("Message Validator", true);
         tools.addItem("Document Metadata Editor", false);
         tools.addItem("Pre-Connectathon Tests", true);
+        tools.addItem("Tests Overview", true);
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");

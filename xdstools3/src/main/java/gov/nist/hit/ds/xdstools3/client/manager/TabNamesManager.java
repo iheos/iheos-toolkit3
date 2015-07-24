@@ -49,6 +49,7 @@ public class TabNamesManager {
     private final String logBrowserTabCode = "LOG_BROWSER";
     private final String contactTabCode = "CONTACT";
     private final String QRSCombinedTabCode = "QRS_COMBINED";
+    private final String testsOverviewTabCode = "TESTS_OVERVIEW";
 
 
 
@@ -81,14 +82,13 @@ public class TabNamesManager {
     public String getSubmitRetrieveTabCode() { return submitRetrieveTabCode; }
     public String getv2TabCode() { return v2TabCode; }
     public String getMHDValidatorTabCode() {return mhdValidatorTabCode;}
-    public String getHomeTabCode() {
-        return homeTabCode;
-    }
+    public String getHomeTabCode() {return homeTabCode;}
     public String getTestDataSubmissionTabCode() {return testDataSubmissionTabCode;}
     public String getMhdtoXdsConverterTabCode() {return mhdToXdsConverterTabCode;}
     public String getLogBrowserTabCode() {return logBrowserTabCode;}
     public String getHelpTabCode() {return helpTabCode;}
     public String getContactTabCode() {return contactTabCode;}
     public String getQRSCombinedTabCode() {return QRSCombinedTabCode;}
+    public String getTestsOverviewTabCode() {return testsOverviewTabCode;}
 
 }

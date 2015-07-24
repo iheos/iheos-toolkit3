@@ -41,6 +41,7 @@ import gov.nist.hit.ds.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.SubmitTestDataTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab.TestStatusTab;
 import gov.nist.hit.ds.xdstools3.client.util.eventBus.*;
 import gov.nist.hit.ds.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.hit.ds.xdstools3.client.util.injection.Xdstools3GinInjector;
@@ -335,6 +336,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         }
         else if(tabName.equals(TabNamesManager.getInstance().getQRSCombinedTabCode())){
             tab = new QueryRetrieveSubmitCombinedTab();
+        }
+        else if(tabName.equals(TabNamesManager.getInstance().getTestsOverviewTabCode())){
+            tab = new TestStatusTab();
         }
         else{
             // unknown tab
