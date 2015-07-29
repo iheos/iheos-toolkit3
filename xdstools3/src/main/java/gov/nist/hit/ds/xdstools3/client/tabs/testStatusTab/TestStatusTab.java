@@ -19,7 +19,7 @@ public class TestStatusTab extends GenericCloseableTab {
         super(header);
 
         VStack contents = new VStack();
-        contents.setWidth(1100);
+        contents.setWidth(1185);
         contents.addMembers(new TestStatusWidget());
         setPane(contents);
     }

@@ -30,4 +30,7 @@ public interface Resources extends ClientBundle {
 
     @Source("icons/play.png")
     ImageResource getPlayIcon();
+
+    @Source("icons/Button_Blank_Blue_Icon_32.png")
+    ImageResource getBlueRoundIcon();
 }
