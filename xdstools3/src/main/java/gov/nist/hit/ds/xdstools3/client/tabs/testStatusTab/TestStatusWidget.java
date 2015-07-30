@@ -24,7 +24,7 @@ public class TestStatusWidget extends SectionStack {
     public TestStatusWidget(){
 
         setWidth100();
-        setHeight(230);
+        setHeight(500);
 
         // Tests statistics header bar
         String title = "<b>Tests Run: 15/26" + "&nbsp&nbsp&nbsp&nbsp" + "Failed: " + "4/26" + "&nbsp&nbsp&nbsp&nbsp" + "Passed: 11/26 (42%)</b>";
@@ -88,16 +88,53 @@ public class TestStatusWidget extends SectionStack {
                     return statusButton;
 
                 } else { return null; }
-            }};
+            }
+
+            @Override
+            protected Canvas getExpansionComponent(final ListGridRecord record) {
+
+                final ListGrid grid = this;
+
+                VLayout expComponent = new VLayout(5);
+                expComponent.setPadding(5);
+
+                final ListGrid testSectionGrid = new ListGrid();
+                testSectionGrid.setWidth100();
+                testSectionGrid.setHeight(100);
+                ListGridField testNumber = new ListGridField("testNumber2", "Test Number");
+                testNumber.setWidth(70);
+                ListGridField testDescription = new ListGridField("testDescription2", "Description");
+                ListGridField commands = new ListGridField("commands2", "Commands");
+                commands.setWidth(280);
+                ListGridField time = new ListGridField("time2", "Time");
+                time.setWidth(90);
+                ListGridField testStatus = new ListGridField("testStatus2", "Status");
+                testStatus.setWidth(40);
+                testStatus.setAlign(Alignment.CENTER);
+                ListGridField sectionNumber = new ListGridField("sectionNumber2", "Section Number");
+                sectionNumber.setHidden(true);
+                ListGridField testReference = new ListGridField("testReference2", "Test Number");
+                testReference.setHidden(true);
+                testSectionGrid.setFields(testNumber, testDescription, commands, time, testStatus, sectionNumber, testReference);
+
+                FakeData bogusDataGenerator = new FakeData();
+                if (record.getAttributeAsString("testNumber").equals("11012")) {
+                    testSectionGrid.addData(bogusDataGenerator.createSubRecord("11012", "a"));
+                    testSectionGrid.addData(bogusDataGenerator.createSubRecord("11012", "b"));
+                }
+
+                expComponent.addMember(testSectionGrid);
+                return expComponent;
+            }
+            };
 
         grid.setShowAllRecords(true);
         grid.setLeaveScrollbarGap(false);
         grid.setShowRecordComponents(true);
         grid.setShowRecordComponentsByCell(true);
-        grid.setGroupStartOpen(GroupStartOpen.ALL);
-        grid.setGroupByField("testNumber");
-        ListGridField testReference = new ListGridField("testReference", "Test Number");
-        testReference.setWidth(70);
+        grid.setCanExpandRecords(true);
+        ListGridField testNumber = new ListGridField("testNumber", "Test Number");
+        testNumber.setWidth(70);
         ListGridField testDescription = new ListGridField("testDescription", "Description");
         ListGridField commands = new ListGridField("commands", "Commands");
         commands.setWidth(280);
@@ -108,9 +145,10 @@ public class TestStatusWidget extends SectionStack {
         testStatus.setAlign(Alignment.CENTER);
         ListGridField sectionNumber = new ListGridField("sectionNumber", "Section Number");
         sectionNumber.setHidden(true);
-        ListGridField testNumber = new ListGridField("testNumber", "Test Number");
-        testNumber.setHidden(true);
-        grid.setFields(testReference, testDescription, commands, time, testStatus, sectionNumber, testNumber);
+        ListGridField testReference = new ListGridField("testReference", "Test Number");
+        testReference.setHidden(true);
+
+        grid.setFields(testNumber, testDescription, commands, time, testStatus, sectionNumber, testReference);
 
         // Add components
         buttonSection.setItems(grid);
@@ -122,8 +160,7 @@ public class TestStatusWidget extends SectionStack {
         // Populate the grid with test data
         FakeData bogusDataGenerator = new FakeData();
         grid.addData(bogusDataGenerator.createRecord("11011", ""));
-        grid.addData(bogusDataGenerator.createRecord("11012", "a"));
-        grid.addData(bogusDataGenerator.createRecord("11012", "b"));
+        grid.addData(bogusDataGenerator.createRecord("11012", ""));
     }
 
     /**

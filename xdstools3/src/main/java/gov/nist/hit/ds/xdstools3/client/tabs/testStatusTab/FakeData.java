@@ -21,4 +21,16 @@ public class FakeData {
         return record;
     }
 
+    public Record createSubRecord(String testNumber, String sectionNumber){
+        ListGridRecord record = new ListGridRecord();
+        String testReference = testNumber.concat(sectionNumber);
+        record.setAttribute("testNumber2", testNumber);
+        record.setAttribute("sectionNumber2", sectionNumber);
+        record.setAttribute("testReference2", testReference);
+        record.setAttribute("testDescription2", "This is the test name / short description.");
+        record.setAttribute("commands2", "");
+        record.setAttribute("time2","04:10 PM EST");
+        record.setAttribute("testStatus2","");
+        return record;
+    }
 }
