@@ -98,11 +98,43 @@ public class TestStatusWidget extends SectionStack {
                 VLayout expComponent = new VLayout(5);
                 expComponent.setPadding(5);
 
-                final ListGrid testSectionGrid = new ListGrid();
+                final ListGrid testSectionGrid = new ListGrid(){
+                    @Override
+                    protected Canvas createRecordComponent(final ListGridRecord record, Integer colNum) {
+
+                        String fieldName = this.getFieldName(colNum);
+
+                        if (fieldName.equals("commands2")) {
+                            HLayout commandsCanvas = new HLayout(3);
+                            commandsCanvas.setHeight(22);
+                            commandsCanvas.setWidth100();
+                            commandsCanvas.setMembersMargin(5);
+                            commandsCanvas.setAlign(Alignment.LEFT);
+
+
+                            ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test");
+                            ImgButton deleteImg = createSmallIcon(Resources.INSTANCE.getRemoveIcon().getSafeUri().asString(), "Delete test results");
+                            IButton testPlanButton =  createSmallButton("Test Plan", "Display the test plan in a new tab", 60);
+                            IButton logButton =  createSmallButton("Log", "Display the log file in a new tab ", 40);
+                            commandsCanvas.addMembers(runImg, deleteImg, testPlanButton, logButton);
+                            return commandsCanvas;
+
+                        } else if (fieldName.equals("testStatus2")) {
+                            ImgButton statusButton = createLargeIconButton(Resources.INSTANCE.getBlueRoundIcon().getSafeUri().asString(), "Partially run");
+                            statusButton.setWidth(20);
+                            statusButton.setHeight(20);
+                            return statusButton;
+
+                        } else { return null; }
+                    }
+                };
                 testSectionGrid.setWidth100();
                 testSectionGrid.setHeight(100);
-                ListGridField testNumber = new ListGridField("testNumber2", "Test Number");
-                testNumber.setWidth(70);
+                testSectionGrid.setShowRecordComponents(true);
+                testSectionGrid.setShowRecordComponentsByCell(true);
+
+                ListGridField testReference = new ListGridField("testReference2", "Test ID");
+                testReference.setWidth(70);
                 ListGridField testDescription = new ListGridField("testDescription2", "Description");
                 ListGridField commands = new ListGridField("commands2", "Commands");
                 commands.setWidth(280);
@@ -113,9 +145,9 @@ public class TestStatusWidget extends SectionStack {
                 testStatus.setAlign(Alignment.CENTER);
                 ListGridField sectionNumber = new ListGridField("sectionNumber2", "Section Number");
                 sectionNumber.setHidden(true);
-                ListGridField testReference = new ListGridField("testReference2", "Test Number");
-                testReference.setHidden(true);
-                testSectionGrid.setFields(testNumber, testDescription, commands, time, testStatus, sectionNumber, testReference);
+                ListGridField testNumber = new ListGridField("testNumber2", "Test Number");
+                testNumber.setHidden(true);
+                testSectionGrid.setFields(testReference, testDescription, commands, time, testStatus, sectionNumber, testNumber);
 
                 FakeData bogusDataGenerator = new FakeData();
                 if (record.getAttributeAsString("testNumber").equals("11012")) {
@@ -126,6 +158,7 @@ public class TestStatusWidget extends SectionStack {
                 expComponent.addMember(testSectionGrid);
                 return expComponent;
             }
+
             };
 
         grid.setShowAllRecords(true);
@@ -133,7 +166,7 @@ public class TestStatusWidget extends SectionStack {
         grid.setShowRecordComponents(true);
         grid.setShowRecordComponentsByCell(true);
         grid.setCanExpandRecords(true);
-        ListGridField testNumber = new ListGridField("testNumber", "Test Number");
+        ListGridField testNumber = new ListGridField("testNumber", "Test ID");
         testNumber.setWidth(70);
         ListGridField testDescription = new ListGridField("testDescription", "Description");
         ListGridField commands = new ListGridField("commands", "Commands");
