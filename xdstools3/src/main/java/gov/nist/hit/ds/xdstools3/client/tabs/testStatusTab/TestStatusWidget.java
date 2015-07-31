@@ -63,17 +63,8 @@ public class TestStatusWidget extends SectionStack {
 
 
                     ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test (overwrites existing results)");
-                    // runImg.addClickHandler(new ClickHandler() {
-                    //     public void onClick(ClickEvent event) {
-                    //         SC.say("Edit Comment Icon Clicked for country : " + record.getAttribute("countryName"));//    }
-                    // });
 
                     ImgButton deleteImg = createSmallIcon(Resources.INSTANCE.getRemoveIcon().getSafeUri().asString(), "Delete test results");
-                    //chartImg.addClickHandler(new ClickHandler() {
-                    //    public void onClick(ClickEvent event) {
-                    //        SC.say("Chart Icon Clicked for country : " + record.getAttribute("countryName"));
-                    //    }
-                    // });
 
                     IButton testPlanButton =  createSmallButton("Test Plan", "Display the test plan in a new tab", 60);
                     testPlanButton.addClickHandler(new ClickHandler() {
