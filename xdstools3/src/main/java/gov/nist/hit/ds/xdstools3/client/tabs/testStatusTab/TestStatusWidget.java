@@ -24,10 +24,12 @@ public class TestStatusWidget extends SectionStack {
     public TestStatusWidget(){
 
         setWidth100();
-        setHeight(500);
+        setHeight(300);
 
         // Tests statistics header bar
-        String title = "<b>Tests Run: 15/26" + "&nbsp&nbsp&nbsp&nbsp" + "Failed: " + "4/26" + "&nbsp&nbsp&nbsp&nbsp" + "Passed: 11/26 (42%)</b>";
+        String tab = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"; // This is a workaround for GWT not accepting tabulations
+        String title = "<b><font color='#4d4d4d'>Tests Run: <font color='blue'>15</font> / 26" + tab + "Failed: " +
+                "<font color='red'>4</font> / 26" + tab + "Passed: <font color='green'>11</font> / 26</b></font>";
         SectionStackSection statsSection = new SectionStackSection(title);
         statsSection.setCanCollapse(false);
         statsSection.setExpanded(true);
@@ -35,7 +37,7 @@ public class TestStatusWidget extends SectionStack {
         // Run - Reset - Reload Button bar
         ImgButton deleteButton = createLargeIconButton(Resources.INSTANCE.getRemoveIcon().getSafeUri().asString(), "Delete all test results");
         ImgButton reloadButton = createLargeIconButton(Resources.INSTANCE.getRefreshIcon().getSafeUri().asString(), "Reload results");
-        ImgButton runButton = createLargeIconButton(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run all tests");
+        ImgButton runButton = createLargeIconButton(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run all tests (overwrites existing results)");
 
         SectionStackSection buttonSection = new SectionStackSection("");
         buttonSection.setControls(runButton, reloadButton, deleteButton);
@@ -59,7 +61,7 @@ public class TestStatusWidget extends SectionStack {
                     commandsCanvas.setAlign(Alignment.LEFT);
 
 
-                    ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test");
+                    ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test (overwrites existing results)");
                     // runImg.addClickHandler(new ClickHandler() {
                     //     public void onClick(ClickEvent event) {
                     //         SC.say("Edit Comment Icon Clicked for country : " + record.getAttribute("countryName"));//    }
@@ -112,8 +114,8 @@ public class TestStatusWidget extends SectionStack {
                             commandsCanvas.setAlign(Alignment.LEFT);
 
 
-                            ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test");
-                            ImgButton deleteImg = createSmallIcon(Resources.INSTANCE.getRemoveIcon().getSafeUri().asString(), "Delete test results");
+                            ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test section (overwrites existing results)");
+                            ImgButton deleteImg = createSmallIcon(Resources.INSTANCE.getRemoveIcon().getSafeUri().asString(), "Delete results for this test section");
                             IButton testPlanButton =  createSmallButton("Test Plan", "Display the test plan in a new tab", 60);
                             IButton logButton =  createSmallButton("Log", "Display the log file in a new tab ", 40);
                             commandsCanvas.addMembers(runImg, deleteImg, testPlanButton, logButton);
@@ -244,7 +246,5 @@ public class TestStatusWidget extends SectionStack {
         button.setTitle(title);
         return button;
     }
-
-
 
     }
