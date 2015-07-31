@@ -89,7 +89,7 @@ public class TestStatusWidget extends SectionStack {
                             Window.open("", "", "");
                         }
                     });
-                    IButton testDescrButton =  createSmallButton("Full Test Description", "Display the full test description in a new tab ", 120);
+                    IButton testDescrButton =  createSmallButton("Test Description", "Display the full test description in a new tab ", 100);
                     testDescrButton.addClickHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent clickEvent) {
