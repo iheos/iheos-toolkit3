@@ -1,10 +1,12 @@
 package gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab;
 
+import com.google.gwt.user.client.*;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.ImgButton;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
@@ -14,7 +16,6 @@ import com.smartgwt.client.widgets.layout.SectionStackSection;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.xdstools3.client.resources.Resources;
 
-import javax.swing.*;
 
 /**
  * Created by Diane Azais local on 7/23/2015.
@@ -75,11 +76,26 @@ public class TestStatusWidget extends SectionStack {
                     // });
 
                     IButton testPlanButton =  createSmallButton("Test Plan", "Display the test plan in a new tab", 60);
-
+                    testPlanButton.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent clickEvent) {
+                            Window.open("", "", "");
+                        }
+                    });
                     IButton logButton =  createSmallButton("Log", "Display the log file in a new tab ", 40);
-
+                    logButton.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent clickEvent) {
+                            Window.open("", "", "");
+                        }
+                    });
                     IButton testDescrButton =  createSmallButton("Full Test Description", "Display the full test description in a new tab ", 120);
-
+                    testDescrButton.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent clickEvent) {
+                            Window.open("", "", "");
+                        }
+                    });
                     commandsCanvas.addMembers(runImg, deleteImg, testPlanButton, logButton, testDescrButton);
                     return commandsCanvas;
 
@@ -117,7 +133,19 @@ public class TestStatusWidget extends SectionStack {
                             ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test section (overwrites existing results)");
                             ImgButton deleteImg = createSmallIcon(Resources.INSTANCE.getRemoveIcon().getSafeUri().asString(), "Delete results for this test section");
                             IButton testPlanButton =  createSmallButton("Test Plan", "Display the test plan in a new tab", 60);
+                            testPlanButton.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent clickEvent) {
+                                    Window.open("", "", "");
+                                }
+                            });
                             IButton logButton =  createSmallButton("Log", "Display the log file in a new tab ", 40);
+                            logButton.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent clickEvent) {
+                                    Window.open("", "", "");
+                                }
+                            });
                             commandsCanvas.addMembers(runImg, deleteImg, testPlanButton, logButton);
                             return commandsCanvas;
 
