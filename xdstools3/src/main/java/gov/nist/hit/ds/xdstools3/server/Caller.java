@@ -2,6 +2,8 @@ package gov.nist.hit.ds.xdstools3.server;
 
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
+import gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab.Test;
+import gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab.TestCollection;
 import gov.nist.hit.ds.xdstools3.shared.Site;
 import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.toolkit.Toolkit;
@@ -296,6 +298,13 @@ public class Caller implements Serializable {
         return new Site();
     }
 
+
+    // ----------------------------- Tests Overview -------------------------------
+
+    // TODO
+    public TestCollection<Test> retrieveAllTests(){
+        return null;
+    }
 }
 
 

@@ -2,6 +2,7 @@ package gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab;
 
 import com.google.gwt.user.client.*;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.ImgButton;
@@ -10,22 +11,23 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
-import com.smartgwt.client.widgets.layout.HLayout;
-import com.smartgwt.client.widgets.layout.SectionStack;
-import com.smartgwt.client.widgets.layout.SectionStackSection;
-import com.smartgwt.client.widgets.layout.VLayout;
+import com.smartgwt.client.widgets.layout.*;
 import gov.nist.hit.ds.xdstools3.client.resources.Resources;
 
 
 /**
  * Created by Diane Azais local on 7/23/2015.
  */
-public class TestStatusWidget extends SectionStack {
+public class TestStatusWidget extends VStack {
 
     public TestStatusWidget(){
-
         setWidth100();
-        setHeight(300);
+        setHeight100();
+
+        SectionStack testStatusStack = new SectionStack();
+        testStatusStack.setVisibilityMode(VisibilityMode.MULTIPLE);
+        testStatusStack.setWidth100();
+        testStatusStack.setHeight(300);
 
         // Tests statistics header bar
         String tab = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"; // This is a workaround for GWT not accepting tabulations
@@ -182,6 +184,7 @@ public class TestStatusWidget extends SectionStack {
 
             };
 
+        // Define characteristics of main grid
         grid.setShowAllRecords(true);
         grid.setLeaveScrollbarGap(false);
         grid.setShowRecordComponents(true);
@@ -205,10 +208,9 @@ public class TestStatusWidget extends SectionStack {
         grid.setFields(testNumber, testDescription, commands, time, testStatus, sectionNumber, testReference);
 
         // Add components
-        buttonSection.setItems(grid);
-        setSections(statsSection, buttonSection);
-
-        // Prepare components for display
+        buttonSection.addItem(grid);
+        testStatusStack.setSections(statsSection, buttonSection);
+        addMember(testStatusStack);
         grid.draw();
 
         // Populate the grid with test data

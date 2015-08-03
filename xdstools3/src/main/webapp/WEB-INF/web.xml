@@ -81,6 +81,10 @@
         <servlet-name>endpointServlet</servlet-name>
         <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.EndpointImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>testStatusServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.TestStatusTabImpl</servlet-class>
+    </servlet>
 
 
     <!-- ============== Servlet mappings ============== -->
@@ -141,6 +145,10 @@
     <servlet-mapping>
         <servlet-name>endpointServlet</servlet-name>
         <url-pattern>/xdstools3/sites</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>testStatusServlet</servlet-name>
+        <url-pattern>/xdstools3/testStatus</url-pattern>
     </servlet-mapping>
 
 
