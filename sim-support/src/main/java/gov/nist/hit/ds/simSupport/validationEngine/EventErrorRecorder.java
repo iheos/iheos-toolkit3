@@ -145,6 +145,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void sectionHeading(String msg) {
         logger.info("Section - " + msg);
         Assertion a = new Assertion();
+        a.setStatus(AssertionStatus.INFO);
         a.setMsg(msg);
         a.setLocation("SectionHeading");
         event.getAssertionGroup().addAssertion(a, true);
@@ -154,8 +155,8 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void challenge(String msg) {
         logger.info("Challenge - " + msg);
         Assertion a = new Assertion();
-        a.setStatus(AssertionStatus.NONE);
-        a.setMsg(msg);
+        a.setStatus(AssertionStatus.INFO);
+        a.setMsg("..." + msg);
         a.setLocation("Challenge");
         event.getAssertionGroup().addAssertion(a, true);
     }
@@ -173,20 +174,34 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void detail(String msg) {
         logger.info("Detail - " + msg);
         Assertion a = new Assertion();
-        a.setStatus(AssertionStatus.NONE);
-        a.setMsg(msg);
+        a.setStatus(AssertionStatus.INFO);
+        a.setMsg("......." + msg);
         a.setLocation("Detail");
         event.getAssertionGroup().addAssertion(a, true);
     }
 
     @Override
-    public void success(String dts, String name, String found, String expected, String RFC) {
-        throw new ToolkitRuntimeException("How to handle success with dts?????");
+    public void success(String dts, String msg, String found, String expected, String RFC) {
+        logger.info("Success - " + msg);
+        Assertion a = new Assertion();
+        a.setStatus(AssertionStatus.SUCCESS);
+        a.setExpected(expected);
+        a.setFound(found);
+        a.setMsg("......." + msg);
+        a.setLocation(RFC);
+        event.getAssertionGroup().addAssertion(a, true);
     }
 
     @Override
-    public void error(String dts, String name, String found, String expected, String RFC) {
-        throw new ToolkitRuntimeException("How to handle error with dts?????");
+    public void error(String dts, String msg, String found, String expected, String RFC) {
+        logger.info("Error - " + msg);
+        Assertion a = new Assertion();
+        a.setStatus(AssertionStatus.ERROR);
+        a.setExpected(expected);
+        a.setFound(found);
+        a.setMsg("......." + msg);
+        a.setLocation(RFC);
+        event.getAssertionGroup().addAssertion(a, true);
     }
 
     @Override
