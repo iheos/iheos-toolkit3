@@ -50,6 +50,11 @@
             <name>gazelle nexus</name>
             <url>http://gazelle.ihe.net/nexus/content/repositories/thirdparty</url>
         </repository>
+        <repository>
+            <id>internal</id>
+            <name>Internal Releases</name>
+            <url>http://gazelle.ihe.net/nexus/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <scm>
