@@ -17,13 +17,21 @@ import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+import gov.nist.toolkit.errorrecording.ErrorRecorder
+import gov.nist.toolkit.errorrecording.client.XdsErrorCode
 import gov.nist.toolkit.valregmsg.message.SoapMessageValidator
 import gov.nist.toolkit.valregmsg.validation.engine.ValidateMessageService
 import gov.nist.toolkit.valsupport.client.ValidationContext
 import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine
 import org.apache.log4j.Logger
+
 /**
+ * Proxy/validator interface.
+ * Proxy calls validateMessage(String validationType, String msgHeader, byte[] msgBody, ValidationLevel validationLevel)
+ * to validate a captured message.
+ * Returns: ValidateMessageResponse
+ *
  * Created by bmajur on 8/28/14.
  */
 
@@ -54,6 +62,7 @@ class ValidatorManagerV2 implements MessageValidator {
     }
 
     ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] msgBody, ValidationLevel validationLevel) {
+        // TODO - exceptionMessages are never logged
         def exceptionMessages = []
         if (soapAction == validationType) {
             def httpMessage
@@ -77,9 +86,9 @@ class ValidatorManagerV2 implements MessageValidator {
                 (transactionType, isRequest) = getTransactionType(action)
 
             if (!transactionType) {
-                exceptionMessages << "Unknown SOAPAction ${action}"
+                exceptionMessages << "Unknown SOAPAction ${action}."
                 exceptionMessages << "SOAPActions are configured in actorTransactions.xml."
-                exceptionMessages << "Known actions are: " + ActorTransactionTypeFactory.knownRequestActions
+                exceptionMessages << "Known actions are: " + ActorTransactionTypeFactory.knownRequestActions + '.'
                 simHandle = SimUtils.open(simId, repositoryName)
             } else {
                 simHandle = SimUtils.create(transactionType, repositoryName, simId)
@@ -100,17 +109,27 @@ class ValidatorManagerV2 implements MessageValidator {
                 simHandle.event.fault = new Fault("Validation failed", '','unknown', exceptionMessages.toString())
 
             //
-            // Crude V2 hook starts here
+            // V2 hook starts here
             //
 
             ValidationContext vc = DefaultValidationContextFactory.validationContext()
             SoapMessageValidator.setValidationContextFromWSAction(vc, action)
+            // For now assume all proxy captures are SOAP messages
+            // Should check HTTP Content-Type header
             vc.hasSoap = true
+
+            ErrorRecorder er = new EventErrorRecorderBuilder().buildNewErrorRecorder(simHandle.event)
+
+            if (exceptionMessages)
+                er.err(XdsErrorCode.Code.SoapFault, exceptionMessages.join(' '), 'ValidationManagerV2', '')
+
+            er.externalChallenge('Validation request: ' + vc.getTransactionName())
+
             // This is the v2 validation service manager
             ValidateMessageService vms = new ValidateMessageService(null)
-            MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, new EventErrorRecorderBuilder().buildNewErrorRecorder(simHandle.event))
+            MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, er)
 
-            println "MVC is ${mvc}"
+            log.info "MVC is ${mvc}"
 
             ValidateMessageResponse response = new ValidateMessageResponse()
             response.validationStatus = ValidationStatus.ERROR
@@ -134,6 +153,7 @@ class ValidatorManagerV2 implements MessageValidator {
             SimUtils.close(simHandle)
             return response
         }
+        // This error comes from tk-browser / ValidatorManager interface coordination problems
         throw new ToolkitRuntimeException("Do not understand validation type ${validationType}")
     }
 
