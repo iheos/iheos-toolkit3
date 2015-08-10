@@ -22,6 +22,8 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     List<ErrorRecorder> children = new ArrayList<>();
     static Logger logger = Logger.getLogger(EventErrorRecorder.class);
 
+    List<Object> validators = new ArrayList<Object>();
+
     // Should only be called from Factory class - EventErrorRecorderBuilder
     protected EventErrorRecorder(Event event) {  // only used by v3
         super(event);
@@ -33,7 +35,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
 
     @Override
-    public void err(XdsErrorCode.Code code, String msg, String location, String resource, Object log_message) {
+    public void err(XdsErrorCode.Code code, String msg, String ignored, String resource, Object log_message) {
         logger.info("ERROR - " + msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
@@ -42,14 +44,14 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
             a.setStatus(AssertionStatus.ERROR);
             a.setCode(code.name());
             a.setMsg(msgLines[i]);
-            a.setLocation(location);
+            a.setLocation(currentValidatorName());
             a.setReference(resource);
             event.getAssertionGroup().addAssertion(a, true);
         }
     }
 
     @Override
-    public void err(XdsErrorCode.Code code, String msg, String location, String resource) {
+    public void err(XdsErrorCode.Code code, String msg, String ignored, String resource) {
         logger.info("ERROR - " + msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
@@ -58,20 +60,20 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
             a.setStatus(AssertionStatus.ERROR);
             a.setCode(code.name());
             a.setMsg(msgLines[i]);
-            a.setLocation(location);
+            a.setLocation(currentValidatorName());
             a.setReference(resource);
             event.getAssertionGroup().addAssertion(a, true);
         }
     }
 
     @Override
-    public void err(XdsErrorCode.Code code, String msg, Object location, String resource) {
+    public void err(XdsErrorCode.Code code, String msg, Object ignored, String resource) {
         logger.info("ERROR - " + msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
         for (int i=0; i<msgLines.length; i++) {
             Assertion a = new Assertion();
-            if (location != null) a.setLocation(location.getClass().getName());
+            a.setLocation(currentValidatorName());
             a.setStatus(AssertionStatus.ERROR);
             a.setCode(code.name());
             a.setMsg(msgLines[i]);
@@ -92,51 +94,51 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     }
 
     @Override
-    public void err(XdsErrorCode.Code code, String msg, String location, String severity, String resource) {
+    public void err(XdsErrorCode.Code code, String msg, String ignored, String severity, String resource) {
         logger.info("ERROR - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
         a.setCode(code.name());
         a.setMsg(msg);
-        a.setLocation(location);
+        a.setLocation(currentValidatorName());
         a.setReference(resource);
         event.getAssertionGroup().addAssertion(a, true);
         throw new ToolkitRuntimeException("How to handle String severity?????");
     }
 
     @Override
-    public void err(String code, String msg, String location, String severity, String resource) {
+    public void err(String code, String msg, String ignored, String severity, String resource) {
         logger.info("ERROR - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
         a.setCode(code);
         a.setMsg(msg);
-        a.setLocation(location);
+        a.setLocation(currentValidatorName());
         a.setReference(resource);
         event.getAssertionGroup().addAssertion(a, true);
         throw new ToolkitRuntimeException("How to handle String severity?????");
     }
 
     @Override
-    public void warning(String code, String msg, String location, String resource) {
+    public void warning(String code, String msg, String ignored, String resource) {
         logger.info("WARNING - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.WARNING);
         a.setCode(code);
         a.setMsg(msg);
-        a.setLocation(location);
+        a.setLocation(currentValidatorName());
         a.setReference(resource);
         event.getAssertionGroup().addAssertion(a, true);
     }
 
     @Override
-    public void warning(XdsErrorCode.Code code, String msg, String location, String resource) {
+    public void warning(XdsErrorCode.Code code, String msg, String ignored, String resource) {
         logger.info("WARNING - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.WARNING);
         a.setCode(code.name());
         a.setMsg(msg);
-        a.setLocation(location);
+        a.setLocation(currentValidatorName());
         a.setReference(resource);
         event.getAssertionGroup().addAssertion(a, true);
     }
@@ -145,9 +147,10 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void sectionHeading(String msg) {
         logger.info("Section - " + msg);
         Assertion a = new Assertion();
-        a.setStatus(AssertionStatus.INFO);
+        a.setStatus(AssertionStatus.NONE);
         a.setMsg(msg);
-        a.setLocation("SectionHeading");
+        a.setCode("SectionHeading");
+        a.setLocation(currentValidatorName());
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -155,9 +158,10 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void challenge(String msg) {
         logger.info("Challenge - " + msg);
         Assertion a = new Assertion();
-        a.setStatus(AssertionStatus.INFO);
-        a.setMsg("..." + msg);
-        a.setLocation("Challenge");
+        a.setStatus(AssertionStatus.NONE);
+        a.setMsg(msg);
+        a.setCode("Challenge");
+        a.setLocation(currentValidatorName());
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -165,8 +169,10 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void externalChallenge(String msg) {
         logger.info("ExternalChallenge - " + msg);
         Assertion a = new Assertion();
+        a.setStatus(AssertionStatus.NONE);
         a.setMsg(msg);
-        a.setLocation("ExternalChallenge");
+        a.setCode("ExternalChallenge");
+        a.setLocation(currentValidatorName());
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -174,9 +180,21 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void detail(String msg) {
         logger.info("Detail - " + msg);
         Assertion a = new Assertion();
-        a.setStatus(AssertionStatus.INFO);
-        a.setMsg("......." + msg);
-        a.setLocation("Detail");
+        a.setStatus(AssertionStatus.NONE);
+        a.setMsg(msg);
+        a.setCode("Detail");
+        a.setLocation(currentValidatorName());
+        event.getAssertionGroup().addAssertion(a, true);
+    }
+
+    @Override
+    public void report(String name, String found) {
+        logger.info("Report - " + name + ": " + found);
+        Assertion a = new Assertion();
+        a.setStatus(AssertionStatus.NONE);
+        a.setFound(found);
+        a.setMsg(name);
+        a.setLocation(currentValidatorName());
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -187,8 +205,9 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
         a.setStatus(AssertionStatus.SUCCESS);
         a.setExpected(expected);
         a.setFound(found);
-        a.setMsg("......." + msg);
-        a.setLocation(RFC);
+        a.setMsg(msg);
+        a.setReference(RFC);
+        a.setLocation(currentValidatorName());
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -199,9 +218,16 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
         a.setStatus(AssertionStatus.ERROR);
         a.setExpected(expected);
         a.setFound(found);
-        a.setMsg("......." + msg);
-        a.setLocation(RFC);
+        a.setMsg(msg);
+        a.setReference(RFC);
+        a.setLocation(currentValidatorName());
         event.getAssertionGroup().addAssertion(a, true);
+    }
+
+    @Override
+    public void test(boolean good, String dts, String name, String found, String expected, String RFC) {
+        if (good) success(dts, name, found, expected, RFC);
+        else error(dts, name, found, expected, RFC);
     }
 
     @Override
@@ -260,6 +286,26 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     @Override
     public int depth() {
         return 0;
+    }
+
+    @Override
+    public void registerValidator(Object validator) {
+        validators.add(validator);
+    }
+
+    @Override
+    public void unRegisterValidator(Object validator) {
+        if (validators.size() == 0) return;
+        Object top = validators.get(validators.size() - 1);
+        if (top == validator) {
+            validators.remove(validators.size() - 1);
+        }
+    }
+
+    String currentValidatorName() {
+        if (validators.size() == 0) return "";
+        Object top = validators.get(validators.size() - 1);
+        return top.getClass().getSimpleName();
     }
 
     @Override
