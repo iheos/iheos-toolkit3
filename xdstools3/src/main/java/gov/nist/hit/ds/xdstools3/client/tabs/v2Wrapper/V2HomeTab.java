@@ -1,25 +1,24 @@
-package gov.nist.hit.ds.xdstools3.client.tabs.findDocumentsTab;
+package gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 import gov.nist.hit.ds.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools2.client.tabs.FindDocumentsTab;
+import gov.nist.hit.ds.xdstools3.client.util.injection.Xdstools3GinInjector;
+import gov.nist.toolkit.xdstools2.client.Xdstools2;
 
 /**
  * This class is for the UI tab that hosts a log browser widget.
  */
-public class FindDocumentsV2Tab extends GenericCloseableTab {
-//    private Logger logger=Logger.getLogger(FindDocumentsV2Tab.class.getName());
+public class V2HomeTab extends GenericCloseableTab {
     // RPC services declaration
     // --
 
     // tab's title and header
-    private static String header="Find Documents2";
+    private static String header="V2 Home";
 
     // UI components
     // --
@@ -28,10 +27,14 @@ public class FindDocumentsV2Tab extends GenericCloseableTab {
     // --
 
     final VLayout layout = new VLayout(10);
+
+    private static final Xdstools3GinInjector injector=Xdstools3GinInjector.injector;
+    static Xdstools2 xdstools2 = injector.getXdstools2();
+
     /**
      * Default constructor
      */
-    public FindDocumentsV2Tab() {
+    public V2HomeTab() {
 
         super(header);
         setPane((Canvas) createContents());
@@ -52,22 +55,21 @@ public class FindDocumentsV2Tab extends GenericCloseableTab {
 //Window.alert("in createContent");
         try {
 
+//
+//            ScrollPanel sp = new ScrollPanel();
+//            sp.setSize("100%","100%");
 
-//            Window.alert("v2 is null? " +  (xdstools2==null));
-//            Window.alert("tab is null?" + (xdstools2.getTabPanel()==null));
-
-             FindDocumentsTab findDocumentsTabV2 =  new FindDocumentsTab();
-             findDocumentsTabV2.onAbstractTabLoad(getXdstools2(), false, null);
-
-
-
-//            layout.addMember(xdstools2.getTabPanel());
-
-            ScrollPanel sp = new ScrollPanel(findDocumentsTabV2.topPanel);
-            sp.setSize("100%","100%");
+//            Xdstools2 xdstools2 = new Xdstools2();
+//            xdstools2.loadTkProps();
 
 
-            layout.addMember(sp);
+
+
+//            Window.alert("getTabP is null? " + (getXdstools2().getTabPanel()==null));
+            layout.setSize("100%", "100%");
+            xdstools2.getTabPanel().setSize("100%","100%");
+            layout.addMember(xdstools2.getTabPanel());
+
 
             bindUI();
 
@@ -89,7 +91,7 @@ public class FindDocumentsV2Tab extends GenericCloseableTab {
      */
     @Override
     protected String setTabName() {
-        return TabNamesManager.getInstance().getFindDocumentsV2TabCode();
+        return TabNamesManager.getInstance().getV2HomeTabCode();
     }
 
     /**

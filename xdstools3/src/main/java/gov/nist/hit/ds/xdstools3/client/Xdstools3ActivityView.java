@@ -27,24 +27,50 @@ import gov.nist.hit.ds.xdstools3.client.customWidgets.toolbar.ToolbarService;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.toolbar.ToolbarServiceAsync;
 import gov.nist.hit.ds.xdstools3.client.manager.Manager;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
-import gov.nist.hit.ds.xdstools3.client.tabs.*;
+import gov.nist.hit.ds.xdstools3.client.tabs.EndpointConfigTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.GenericTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.GenericTabSet;
+import gov.nist.hit.ds.xdstools3.client.tabs.HelpTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.MessageValidatorTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.QRSCombinedTab.QueryRetrieveSubmitCombinedTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
-import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.*;
+import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.FolderValidationTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.LifecycleValidationTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.RegisterAndQueryTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.SourcesStoresDocumentValidationTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.SubmitRetrieveTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.contactTab.ContactTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
-import gov.nist.hit.ds.xdstools3.client.tabs.findDocumentsTab.FindDocumentsV2Tab;
 import gov.nist.hit.ds.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.logBrowserTab.LogBrowserTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
-import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.*;
+import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.FindFoldersTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.GetDocumentsTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.GetFolderAndContentsTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.GetFoldersTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.GetRelatedDocumentsTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.GetSubmissionSetAndContentsTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.RetrieveDocumentsTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.SubmitTestDataTab;
-import gov.nist.hit.ds.xdstools3.client.util.eventBus.*;
-import gov.nist.hit.ds.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.V2HomeTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.DocRetrieveTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.FindDocumentsByRefIdTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.FindDocumentsTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.GetRelatedTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.InspectorTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.MPQFindDocumentsTab;
+import gov.nist.hit.ds.xdstools3.client.util.eventBus.CloseAllTabsEvent;
+import gov.nist.hit.ds.xdstools3.client.util.eventBus.CloseOtherTabsEvent;
+import gov.nist.hit.ds.xdstools3.client.util.eventBus.CloseTabEvent;
+import gov.nist.hit.ds.xdstools3.client.util.eventBus.OpenTabEvent;
+import gov.nist.hit.ds.xdstools3.client.util.eventBus.OpenTabEventHandler;
 import gov.nist.hit.ds.xdstools3.client.util.injection.Xdstools3GinInjector;
+import gov.nist.toolkit.xdstools2.client.event.tabContainer.V2TabOpenedEvent;
+import gov.nist.toolkit.xdstools2.client.tabs.TabLauncher;
 
 import java.util.logging.Logger;
 
@@ -146,18 +172,25 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         // Add listener for Open Tab eventBus. The tabs called must be defined in function "openTab".
         Manager.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
             public void onEvent(OpenTabEvent event) {
-                openTab(event.getTabName());
+                if (event.getV2TabOpenedEvent()==null) {
+                    openTab(event.getTabName());
+                } else {
+                    openTab(event.getV2TabOpenedEvent());
+                }
             }
         });
+
 
         topTabSet.addTabSelectedHandler(new TabSelectedHandler() {
             @Override
             public void onTabSelected(TabSelectedEvent tabSelectedEvent) {
                 String tabName;
                 tabName=((GenericTab) tabSelectedEvent.getTab()).getTabName();
+//                Window.alert("*** tab selection handler: " + tabName);
                 Xdstools3GinInjector.injector.getPlaceController().goTo(new TabPlace(tabName));
             }
         });
+
         //---------- Close Tabs from context menu ---------
         //------ TODO Could be move to GenericTabSet ------
         Manager.EVENT_BUS.addHandler(CloseTabEvent.TYPE,new CloseTabEvent.CloseTabEventHandler() {
@@ -244,6 +277,61 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         //--------------------------------------------------
     }
 
+    public Tab openTab(V2TabOpenedEvent event) {
+        Tab tab = null;
+        String tabName = event.getTitle();
+
+
+        /* *************** begin v2 ************* */
+
+        if (tabName.equals(TabNamesManager.getInstance().getV2HomeTabCode())) {
+            tab = new V2HomeTab();
+        }
+        else if (tabName.equals(TabLauncher.findDocumentsTabLabel)) {
+           tab = new FindDocumentsTab(event);
+            // Use PlaceTab to launch non-event based v2 tabs (make sure the v2 xdstools2 addTab event propagation is turned off)
+            // tab = new FindDocumentsEmbeddedPlaceTab();
+        }
+        else if (tabName.equals("Inspector")) { // Note: this v2 tab is a dependent tab
+            tab = new InspectorTab(event);
+        }
+        else if (tabName.equals(TabLauncher.findDocumentsByRefIdTabLabel)) {
+            tab = new FindDocumentsByRefIdTab(event);
+        }
+        else if (tabName.equals(TabLauncher.mpqFindDocumentsTabLabel) || "MPQFindDocuments".equals(tabName)) { // Note: this v2 tab link text in v2 Home differs from the actual tab display label
+            tab = new MPQFindDocumentsTab(event);
+        }
+        else if (tabName.equals(TabLauncher.getDocumentsTabLabel)) {
+            tab = new gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.GetDocumentsTab(event);
+        }
+        else if (tabName.equals(TabLauncher.getRelatedTabLabel)) {
+            tab = new GetRelatedTab(event);
+        }
+        else if (tabName.equals(TabLauncher.findFoldersTabLabel)) {
+            tab = new gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.FindFoldersTab(event);
+        }
+        else if (tabName.equals(TabLauncher.getFoldersTabLabel)) {
+            tab = new gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.GetFoldersTab(event);
+        }
+        else if (tabName.equals(TabLauncher.getFolderAndContentsTabLabel)) {
+            tab = new gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.GetFolderAndContentsTab(event);
+        }
+        else if (tabName.equals(TabLauncher.getSubmissionSetTabLabel) || "SubmissionSetAndContents".equals(tabName)) { // Note: this v2 tab link text in v2 Home differs from the actual tab display label
+            tab = new gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.GetSubmissionSetAndContentsTab(event);
+        }
+        else if (tabName.equals(TabLauncher.documentRetrieveTabLabel) || "RetrieveDoc".equals(tabName)) { // Note: this v2 tab link text in v2 Home differs from the actual tab display label
+            tab = new DocRetrieveTab(event);
+        }
+
+        /* *************** end v2 ************* */
+
+        if (tab!=null) {
+            addTab(tab);
+        }
+
+        return tab;
+
+    }
 
     /**
      * Opens a given tab defined by its name. Updates the display to add this new tab and to bring it into focus.
@@ -267,9 +355,6 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         }
         else if (tabName.equals(TabNamesManager.getInstance().getFindDocumentsTabCode())) {
             tab = new FindDocumentTab();
-        }
-        else if (tabName.equals(TabNamesManager.getInstance().getFindDocumentsV2TabCode())) {
-            tab = new FindDocumentsV2Tab();
         }
         else if (tabName.equals(TabNamesManager.getInstance().getMpqFindDocumentsTabCode())) {
             tab = new MPQTab();
@@ -340,20 +425,34 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         else if(tabName.equals(TabNamesManager.getInstance().getQRSCombinedTabCode())){
             tab = new QueryRetrieveSubmitCombinedTab();
         }
-        else{
-            // unknown tab
-            topTabSet.selectTab(0); // todo we can create a 404
-        }
+        else {
 
+            // Check if it is a V2 tab
+            V2TabOpenedEvent v2TabOpenedEvent = new V2TabOpenedEvent(null,tabName,-1);
+            if (openTab(v2TabOpenedEvent)==null) {
+
+                // unknown tab
+                topTabSet.selectTab(0); // todo we can create a 404
+                return;
+            }
+        }
+        addTab(tab);
+
+
+    }
+
+    protected void addTab(Tab tab) {
         // update set of tabs
         if (tab != null) {
             // tests if the tab is already open
+//            Window.alert("In addTab(): 2 title:" + tab.getTitle() + " id:" + tab.getID() + " name:" + tab.getName());
             Tab t=topTabSet.findTab(tab);
             if(t!=null){
                 // select and display the tab when already open
                 topTabSet.selectTab(t);
             }else{
                 // open a new tab in tabset, select and display it.
+
                 topTabSet.addTab(tab);
                 topTabSet.selectTab(tab);
             }
