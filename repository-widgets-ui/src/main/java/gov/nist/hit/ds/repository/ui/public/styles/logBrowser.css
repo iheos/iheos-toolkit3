@@ -18,6 +18,7 @@ h1 {
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
   width: 400px;
+  z-index: 16777271; /* This is required so that the GWT DialogBox shows up on top (especially when v2 tabs are running in SmartGWT) */
 }
 
 .dialogVPanel {
