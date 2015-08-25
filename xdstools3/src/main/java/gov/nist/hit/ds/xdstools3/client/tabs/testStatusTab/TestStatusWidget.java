@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.widgets.Canvas;
@@ -13,12 +15,18 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.*;
 import gov.nist.hit.ds.xdstools3.client.resources.Resources;
+import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.TestDataSubmissionServices;
+import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.TestDataSubmissionServicesAsync;
 
 
 /**
  * Created by Diane Azais local on 7/23/2015.
  */
 public class TestStatusWidget extends VStack {
+
+    // RPC Services declaration
+    private final static TestStatusTabServiceAsync testStatusTabService = GWT.create(TestStatusTabService.class);
+
 
     public TestStatusWidget(){
         setWidth100();
@@ -213,10 +221,22 @@ public class TestStatusWidget extends VStack {
         addMember(testStatusStack);
         grid.draw();
 
-        // Populate the grid with test data
-        FakeData bogusDataGenerator = new FakeData();
-        grid.addData(bogusDataGenerator.createRecord("11011", ""));
-        grid.addData(bogusDataGenerator.createRecord("11012", ""));
+        // Populate the grid
+       // FakeData bogusDataGenerator = new FakeData();
+       // grid.addData(bogusDataGenerator.createRecord("11011", ""));
+        //grid.addData(bogusDataGenerator.createRecord("11012", ""));
+
+        testStatusTabService.retrieveAllTests(new AsyncCallback<TestCollection<Test>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(TestCollection<Test> testTestCollection) {
+
+            }
+        });
     }
 
     /**
