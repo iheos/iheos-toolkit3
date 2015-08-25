@@ -130,6 +130,7 @@ public class Toolkit {
             }
         }
 
+        logger.info("...Initializing V2 with warRoot of " + Toolkit.warRootFile);
         gov.nist.toolkit.installation.Installation.installation().warHome(Toolkit.warRootFile);
 
     }

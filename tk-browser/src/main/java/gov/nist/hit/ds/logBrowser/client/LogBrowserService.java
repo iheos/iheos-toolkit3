@@ -11,7 +11,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  *
  */
 
-@RemoteServiceRelativePath("logBrowser")
+@RemoteServiceRelativePath("browser")
 public interface LogBrowserService extends RemoteService  {
 	
 }
