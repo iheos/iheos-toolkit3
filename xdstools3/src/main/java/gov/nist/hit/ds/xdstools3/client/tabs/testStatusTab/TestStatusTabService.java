@@ -2,6 +2,10 @@ package gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import gov.nist.hit.ds.xdstools3.client.exceptions.NoServletSessionException;
+import gov.nist.toolkit.results.client.Result;
+
+import java.util.Map;
 
 /**
  * Created by Diane Azais local on 8/2/2015.
@@ -9,7 +13,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
     @RemoteServiceRelativePath("testStatus")
     public interface TestStatusTabService extends RemoteService {
-        TestCollection<Test> retrieveAllTests();
+    Map<String, Result> retrieveAllTests() throws NoServletSessionException;
     }
 
 

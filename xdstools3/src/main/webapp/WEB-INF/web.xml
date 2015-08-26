@@ -87,6 +87,8 @@
     </servlet>
 
 
+
+
     <!-- ============== Servlet mappings ============== -->
     <servlet-mapping>
         <servlet-name>jersey</servlet-name>
@@ -150,6 +152,7 @@
         <servlet-name>testStatusServlet</servlet-name>
         <url-pattern>/xdstools3/testStatus</url-pattern>
     </servlet-mapping>
+
 
 
     <!-- ============== Default page to serve ============== -->
