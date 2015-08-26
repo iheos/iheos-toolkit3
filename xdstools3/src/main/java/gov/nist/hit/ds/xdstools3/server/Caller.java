@@ -117,7 +117,7 @@ public class Caller implements Serializable {
         //TODO missing the location of external cache
         String[] currentAdminParams = {Toolkit.getHost(), Toolkit.getPort(), Toolkit.getTlsPort(),
                 "ext_cache_location", Toolkit.getDefaultEnvironmentName(), Toolkit.getGazelleConfigURL()};
-        //String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"}; // test data
+        //String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"}; // te3.0.3a - NA 2015st data
         logger.info("Retrieved from back-end (API Toolkit) the following parameters: "
                 + "host, port, TLS port, external cache location, default environment, gazelle URL.");
         return currentAdminParams;

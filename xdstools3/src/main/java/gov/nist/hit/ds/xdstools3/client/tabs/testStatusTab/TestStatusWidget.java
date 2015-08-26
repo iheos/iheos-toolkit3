@@ -14,9 +14,13 @@ import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.*;
+import gov.nist.hit.ds.xdstools3.client.exceptions.NoServletSessionException;
 import gov.nist.hit.ds.xdstools3.client.resources.Resources;
 import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.TestDataSubmissionServices;
 import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.TestDataSubmissionServicesAsync;
+import gov.nist.toolkit.results.client.Result;
+
+import java.util.Map;
 
 
 /**
@@ -226,17 +230,21 @@ public class TestStatusWidget extends VStack {
        // grid.addData(bogusDataGenerator.createRecord("11011", ""));
         //grid.addData(bogusDataGenerator.createRecord("11012", ""));
 
-        testStatusTabService.retrieveAllTests(new AsyncCallback<TestCollection<Test>>() {
-            @Override
-            public void onFailure(Throwable throwable) {
+        try {
+            testStatusTabService.retrieveAllTests(new AsyncCallback<Map<String, Result>>() {
+                @Override
+                public void onFailure(Throwable throwable) {
 
-            }
+                }
 
-            @Override
-            public void onSuccess(TestCollection<Test> testTestCollection) {
+                @Override
+                public void onSuccess(Map<String, Result> testTestCollection) {
 
-            }
-        });
+                }
+            });
+        } catch (NoServletSessionException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
