@@ -5,10 +5,10 @@ import com.smartgwt.client.widgets.menu.MenuItem;
 import com.smartgwt.client.widgets.menu.events.ClickHandler;
 import com.smartgwt.client.widgets.menu.events.MenuItemClickEvent;
 import com.smartgwt.client.widgets.tab.Tab;
-import gov.nist.hit.ds.xdstools3.client.util.eventBus.CloseTabEvent;
 import gov.nist.hit.ds.xdstools3.client.manager.Manager;
 import gov.nist.hit.ds.xdstools3.client.util.eventBus.CloseAllTabsEvent;
 import gov.nist.hit.ds.xdstools3.client.util.eventBus.CloseOtherTabsEvent;
+import gov.nist.hit.ds.xdstools3.client.util.eventBus.CloseTabEvent;
 
 /**
  * Structure for closeable tabs
@@ -49,5 +49,6 @@ public abstract class GenericCloseableTab extends GenericTab {
             }
         });
     }
+
 
 }

@@ -86,13 +86,15 @@ public class DbConnection implements IndexDataSource {
 				return;
 			}
 
+            // TODO: is this needed here?
+            /*
             try {
                 String driver = "org.apache.derby.jdbc.EmbeddedDriver";
                 Class.forName(driver).newInstance();
-
             } catch (Throwable t) {
                 t.printStackTrace();
             }
+            */
 
 
 

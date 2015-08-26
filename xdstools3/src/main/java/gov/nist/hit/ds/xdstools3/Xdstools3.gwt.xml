@@ -31,6 +31,8 @@
     <inherits name='gov.nist.hit.ds.repository.ui.RepositoryWidgetsUI' />
     <!-- end repository related -->
 
+    <!-- ================= Inherit v2 module ================= -->
+    <inherits name='gov.nist.toolkit.xdstools2.Xdstools2_NOEP' />
 
 
     <!-- ============ Specify the app entry point class ============== -->

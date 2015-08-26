@@ -7,8 +7,20 @@ import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import gov.nist.hit.ds.xdstools3.client.activitiesAndPlaces.TabPlace;
-import gov.nist.hit.ds.xdstools3.client.util.injection.Xdstools3GinInjector;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
+import gov.nist.hit.ds.xdstools3.client.util.injection.Xdstools3GinInjector;
+import gov.nist.toolkit.xdstools2.client.Xdstools2;
+import gov.nist.toolkit.xdstools2.client.tabs.DocRetrieveTab;
+import gov.nist.toolkit.xdstools2.client.tabs.FindDocumentsByRefIdTab;
+import gov.nist.toolkit.xdstools2.client.tabs.FindDocumentsTab;
+import gov.nist.toolkit.xdstools2.client.tabs.FindFoldersTab;
+import gov.nist.toolkit.xdstools2.client.tabs.GetDocumentsTab;
+import gov.nist.toolkit.xdstools2.client.tabs.GetFolderAndContentsTab;
+import gov.nist.toolkit.xdstools2.client.tabs.GetFoldersTab;
+import gov.nist.toolkit.xdstools2.client.tabs.GetRelatedTab;
+import gov.nist.toolkit.xdstools2.client.tabs.GetSubmissionSetAndContentsTab;
+import gov.nist.toolkit.xdstools2.client.tabs.MPQFindDocumentsTab;
+import gov.nist.toolkit.xdstools2.client.tabs.TabLauncher;
 
 /**
  * Creates a button with the title passed in argument. Also creates a listener which fires an event through Eventbus,
@@ -17,7 +29,22 @@ import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 public class HomeLinkButton extends IButton {
 
     PlaceController placeController = Xdstools3GinInjector.injector.getPlaceController();
+    Xdstools2 xdstools2 = Xdstools3GinInjector.injector.getXdstools2();
     private final String title;
+
+
+    /*
+    public V2TabOpenedEvent getV2TabOpenedEvent() {
+        return v2TabOpenedEvent;
+    }
+
+    public void setV2TabOpenedEvent(V2TabOpenedEvent v2TabOpenedEvent) {
+        this.v2TabOpenedEvent = v2TabOpenedEvent;
+    }
+
+    private V2TabOpenedEvent v2TabOpenedEvent;
+    */
+
 
     public HomeLinkButton(String _title){
         title = _title;
@@ -36,9 +63,41 @@ public class HomeLinkButton extends IButton {
         addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 // FIXME unsafe code if refactored
-                if (title == "Find Documents")
-                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsTabCode()));
+                if (title == "Find Documents") {
+//                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsTabCode()));
 //                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
+
+                }
+
+                /* ************* begin v2 ************** */
+
+                else if (title.equals(TabLauncher.findDocumentsTabLabel))
+                     new FindDocumentsTab().onAbstractTabLoad(xdstools2, false, null);
+                    // Use placeController to launch non-event based v2 tabs
+                    // placeController.goTo(new TabPlace(TabLauncher.findDocumentsTabLabel));
+                else if (title.equals(TabLauncher.findDocumentsByRefIdTabLabel))
+                    new FindDocumentsByRefIdTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title.equals(TabLauncher.mpqFindDocumentsTabLabel))
+                    new MPQFindDocumentsTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title.equals(TabLauncher.getDocumentsTabLabel))
+                    new GetDocumentsTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title.equals(TabLauncher.getRelatedTabLabel))
+                    new GetRelatedTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title.equals(TabLauncher.findFoldersTabLabel))
+                    new FindFoldersTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title.equals(TabLauncher.getFoldersTabLabel))
+                    new GetFoldersTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title.equals(TabLauncher.getFolderAndContentsTabLabel))
+                    new GetFolderAndContentsTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title.equals(TabLauncher.getSubmissionSetTabLabel))
+                    new GetSubmissionSetAndContentsTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title.equals(TabLauncher.documentRetrieveTabLabel))
+                    new DocRetrieveTab().onAbstractTabLoad(xdstools2, false, null);
+                else if (title == "V2 Home")
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getV2HomeTabCode()));
+
+                /* ************* end v2 ************** */
+
                 else if (title == "MPQ Find Documents")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMpqFindDocumentsTabCode()));
                 else if (title == "Message Validator")
@@ -69,8 +128,8 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getLifecycleValidationTabCode()));
                 else if (title == "XDS.b Registry Folder Handling")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFolderValidationTabCode()));
-                else if (title == "v2 Tab Example")
-                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getv2TabCode()));
+//                else if (title == "v2 Tab Example")
+//                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getv2TabCode()));
                 else if (title == "XDS.b Repository Do This First")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getSubmitRetrieveTabCode()));
                 else if (title == "MHD Validator")
