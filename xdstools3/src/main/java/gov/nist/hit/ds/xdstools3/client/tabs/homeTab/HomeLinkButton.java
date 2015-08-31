@@ -101,7 +101,7 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMpqFindDocumentsTabCode()));
                 else if (title == "Message Validator")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMessageValidatorTabCode()));
-                else if (title == "Document Metadata Editor")
+                else if (title == "XDS Document Entry Editor")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()));
                 else if (title == "Pre-Connectathon Tests")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getPreConnectathonTestsTabCode()));

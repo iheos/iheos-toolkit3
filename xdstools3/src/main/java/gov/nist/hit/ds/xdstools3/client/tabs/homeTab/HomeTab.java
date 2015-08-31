@@ -57,7 +57,7 @@ public class HomeTab extends GenericTab {
         tools.addItem("V2 Home", 2, false);
         tools.addItem("V2 Dynamic Tab", 2, false);
         tools.addItem("Test of Endpoint selection", 3, true);
-        tools.addItem("Document Metadata Editor", 3, false);
+        tools.addItem("XDS Document Entry Editor", 3, false);
         tools.addItem("Pre-Connectathon Tests", 3, true);
         tools.addItem("Tests Overview", 3, true);
 
