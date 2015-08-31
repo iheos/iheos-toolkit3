@@ -9,6 +9,8 @@ import gov.nist.hit.ds.xdstools3.server.Caller;
 import gov.nist.toolkit.results.client.Result;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,10 +19,11 @@ import java.util.Map;
 public class TestStatusTabImpl extends RemoteServiceServlet implements TestStatusTabService {
 
     private static final long serialVersionUID = 1L;
-
+/*
     @Override
     public Map<String, Result> retrieveAllTests() throws NoServletSessionException {
-        return Caller.getInstance().getTestResults(new ArrayList<String>(),"");
-    }
+        return new HashMap<>();
+       // return Caller.getInstance().getTestResults(new ArrayList<String>(),"");
+    }*/
 
 }

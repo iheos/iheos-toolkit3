@@ -321,13 +321,13 @@ public class Caller implements Serializable {
     // ----------------------------- Tests Overview -------------------------------
 
     // Returns a Map of test results based on the test ID and current session
-    public Map<String, Result> getTestResults(List<String> testIds, String testSession)
+/*    public Map<String, Result> getTestResults(List<String> testIds, String testSession)
             throws NoServletSessionException {
         // return session().xdsTestServiceManager().getTestResults(testIds, testSession);
         // for ex. use Session.getsession(sessionId)
 
         return null;
-    }
+    }*/
 
 }
 

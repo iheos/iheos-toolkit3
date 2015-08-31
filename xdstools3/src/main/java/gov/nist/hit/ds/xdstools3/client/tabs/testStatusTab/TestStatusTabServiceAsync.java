@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface TestStatusTabServiceAsync {
 
-    void retrieveAllTests(AsyncCallback<Map<String, Result>> async) throws NoServletSessionException;
+   // void retrieveAllTests(AsyncCallback<Map<String, Result>> async) throws NoServletSessionException;
 
 
 }

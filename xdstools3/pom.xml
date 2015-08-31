@@ -98,6 +98,10 @@
             <artifactId>common-datatypes</artifactId>
         </dependency>
         <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>results</artifactId>
+        </dependency>
+        <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>toolkit</artifactId>
         </dependency>

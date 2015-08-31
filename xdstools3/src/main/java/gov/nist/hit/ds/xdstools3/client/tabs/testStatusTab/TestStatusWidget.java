@@ -230,7 +230,7 @@ public class TestStatusWidget extends VStack {
        // grid.addData(bogusDataGenerator.createRecord("11011", ""));
         //grid.addData(bogusDataGenerator.createRecord("11012", ""));
 
-        try {
+    /*    try {
             testStatusTabService.retrieveAllTests(new AsyncCallback<Map<String, Result>>() {
                 @Override
                 public void onFailure(Throwable throwable) {
@@ -245,6 +245,7 @@ public class TestStatusWidget extends VStack {
         } catch (NoServletSessionException e) {
             e.printStackTrace();
         }
+        */
     }
 
     /**

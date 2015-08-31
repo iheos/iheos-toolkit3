@@ -13,7 +13,7 @@ import java.util.Map;
 
     @RemoteServiceRelativePath("testStatus")
     public interface TestStatusTabService extends RemoteService {
-    Map<String, Result> retrieveAllTests() throws NoServletSessionException;
+   // Map<String, Result> retrieveAllTests() throws NoServletSessionException;
     }
 
 
