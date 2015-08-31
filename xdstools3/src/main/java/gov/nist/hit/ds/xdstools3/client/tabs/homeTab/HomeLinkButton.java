@@ -67,15 +67,10 @@ public class HomeLinkButton extends IButton {
         // go to a new TabPlace on home's button click
         addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                // FIXME unsafe code if refactored
-                if (title == "Find Documents") {
-//                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsTabCode()));
-
-                }
 
                 /* ************* begin v2 ************** */
 
-                else if (title.equals(TabLauncher.findDocumentsTabLabel))
+                if (title.equals(TabLauncher.findDocumentsTabLabel))
                      new FindDocumentsTab().onAbstractTabLoad(xdstools2, false, null);
                     // Use placeController to launch non-event based v2 tabs
                     // placeController.goTo(new TabPlace(TabLauncher.findDocumentsTabLabel));

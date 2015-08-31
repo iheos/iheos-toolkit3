@@ -56,7 +56,7 @@ public class HomeTab extends GenericTab {
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         tools.addItem("V2 Home", false);
         tools.addItem("V2 Dynamic Tab", false);
-        tools.addItem("Message Validator", true);
+        tools.addItem("Test of Endpoint selection", true);
         tools.addItem("Document Metadata Editor", false);
         tools.addItem("Pre-Connectathon Tests", true);
         tools.addItem("Tests Overview", true);
