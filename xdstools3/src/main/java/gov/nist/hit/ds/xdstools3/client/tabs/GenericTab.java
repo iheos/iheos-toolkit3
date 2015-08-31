@@ -9,6 +9,7 @@ import com.smartgwt.client.widgets.tab.Tab;
 public abstract class GenericTab extends Tab {
     private String tabName;
 
+
     public GenericTab(String header) {
         tabName = setTabName();
         setTitle(header);

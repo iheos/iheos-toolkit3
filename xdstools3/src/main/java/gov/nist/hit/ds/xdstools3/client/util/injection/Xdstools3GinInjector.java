@@ -7,6 +7,7 @@ import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 import gov.nist.hit.ds.xdstools3.client.Xdstools3ActivityView;
+import gov.nist.toolkit.xdstools2.client.Xdstools2;
 
 /**
  * Application Client's Factory. Ginjector type can be used to bootstrap injection.
@@ -24,6 +25,7 @@ public interface Xdstools3GinInjector extends Ginjector{
     public final static Xdstools3GinInjector injector = GWT.create(Xdstools3GinInjector.class);
 
     Xdstools3ActivityView getXdstools3();
+    Xdstools2 getXdstools2();
     EventBus getEventBus();
     PlaceController getPlaceController();
 
