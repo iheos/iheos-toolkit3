@@ -29,6 +29,21 @@ public class HomeTab extends GenericTab {
      */
     protected HStack createContents(){
 
+        HomeBox preConnectathonTools = new HomeBox("Pre-Connectathon Tools");
+        preConnectathonTools.addItem("Pre-Connectathon Tests", 3, true);
+
+        HomeBox connectathonTools = new HomeBox("Connectathon Tools");
+        connectathonTools.addItem("Tests Overview", 3, true);
+        connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
+        // Connectathon Validations
+        connectathonTools.addItem("XDS.b Doc Source Stores Document", 3,true);
+        // Registry Validations
+        connectathonTools.addItem("XDS.b Registry Do This First", 3, true);
+        connectathonTools.addItem("XDS.b Lifecycle", 3, true);
+        connectathonTools.addItem("XDS.b Registry Folder Handling", 3, true);
+        // Repository Validations
+        connectathonTools.addItem("XDS.b Repository Do This First", 3, true);
+
         HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
        /* queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents", true);
@@ -50,44 +65,34 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.addItem(TabLauncher.getFolderAndContentsTabLabel, 2, false);
         queriesAndRetrieves.addItem(TabLauncher.getSubmissionSetTabLabel, 2, false);
         queriesAndRetrieves.addItem(TabLauncher.documentRetrieveTabLabel, 2, false);
-        queriesAndRetrieves.addItem("Query - Retrieve - Submit", 3, true);
 
-        HomeBox tools = new HomeBox("Tools");
-        tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
-        tools.addItem("V2 Home", 2, false);
-        tools.addItem("V2 Dynamic Tab", 2, false);
-        tools.addItem("Test of Endpoint selection", 3, true);
-        tools.addItem("XDS Document Entry Editor", 3, false);
-        tools.addItem("Pre-Connectathon Tests", 3, true);
-        tools.addItem("Tests Overview", 3, true);
+        HomeBox tempDev = new HomeBox("Temporary Tabs & Long-Term Development");
+        tempDev.setIcon("icons/glyphicons/glyphicons_280_settings.png");
+        tempDev.addItem("V2 Home", 2, false);
+        tempDev.addItem("V2 Dynamic Tab", 2, false);
+        tempDev.addItem("Test of Endpoint selection", 3, true);
+        tempDev.addItem("Query - Retrieve - Submit", 3, true);
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
         sendTestData.addItem("Submit Test Data", 3, true);
 
-        HomeBox simulators = new HomeBox("Simulators");
-        simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
+        HomeBox generateTestData = new HomeBox("Generate Test Data");
+        generateTestData.addItem("XDS Document Entry Editor", 3, false);
+
+        //HomeBox simulators = new HomeBox("Simulators");
+        //simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
 
         HomeBox mhdTools = new HomeBox("MHD Tools");
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         mhdTools.addItem("MHD Validator", 3, false);
         //mhdTools.addItem("MHD to XDS Converter", 3, true);
 
-        HomeBox connectathonTools = new HomeBox("Connectathon Tools");
-        connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
-        // Connectathon Validations
-        connectathonTools.addItem("XDS.b Doc Source Stores Document", 3,true);
-        // Registry Validations
-        connectathonTools.addItem("XDS.b Registry Do This First", 3, true);
-        connectathonTools.addItem("XDS.b Lifecycle", 3, true);
-        connectathonTools.addItem("XDS.b Registry Folder Handling", 3, true);
-        // Repository Validations
-        connectathonTools.addItem("XDS.b Repository Do This First", 3, true);
 
         VStack vstack1 = new VStack();
         VStack vstack2 = new VStack();
-        vstack1.addMembers(mhdTools, queriesAndRetrieves, connectathonTools);
-        vstack2.addMembers(tools, sendTestData, simulators);
+        vstack1.addMembers(preConnectathonTools, connectathonTools, generateTestData, sendTestData);
+        vstack2.addMembers(queriesAndRetrieves, mhdTools, tempDev);
 
         HStack hstack = new HStack();
         hstack.addMembers(vstack1, vstack2);
