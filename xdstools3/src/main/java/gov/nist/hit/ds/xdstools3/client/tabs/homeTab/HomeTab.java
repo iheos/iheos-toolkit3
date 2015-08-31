@@ -40,49 +40,49 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.addItem("Get Folders", true);
         queriesAndRetrieves.addItem("Get Folder and Contents", true);
         queriesAndRetrieves.addItem("Get Submission Set and Contents", true); */
-        queriesAndRetrieves.addItem(TabLauncher.findDocumentsTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.findDocumentsByRefIdTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.mpqFindDocumentsTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.getDocumentsTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.getRelatedTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.findFoldersTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.getFoldersTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.getFolderAndContentsTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.getSubmissionSetTabLabel, false);
-        queriesAndRetrieves.addItem(TabLauncher.documentRetrieveTabLabel, false);
-        queriesAndRetrieves.addItem("Query - Retrieve - Submit", true);
+        queriesAndRetrieves.addItem(TabLauncher.findDocumentsTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.findDocumentsByRefIdTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.mpqFindDocumentsTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.getDocumentsTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.getRelatedTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.findFoldersTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.getFoldersTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.getFolderAndContentsTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.getSubmissionSetTabLabel, 2, false);
+        queriesAndRetrieves.addItem(TabLauncher.documentRetrieveTabLabel, 2, false);
+        queriesAndRetrieves.addItem("Query - Retrieve - Submit", 3, true);
 
         HomeBox tools = new HomeBox("Tools");
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
-        tools.addItem("V2 Home", false);
-        tools.addItem("V2 Dynamic Tab", false);
-        tools.addItem("Test of Endpoint selection", true);
-        tools.addItem("Document Metadata Editor", false);
-        tools.addItem("Pre-Connectathon Tests", true);
-        tools.addItem("Tests Overview", true);
+        tools.addItem("V2 Home", 2, false);
+        tools.addItem("V2 Dynamic Tab", 2, false);
+        tools.addItem("Test of Endpoint selection", 3, true);
+        tools.addItem("Document Metadata Editor", 3, false);
+        tools.addItem("Pre-Connectathon Tests", 3, true);
+        tools.addItem("Tests Overview", 3, true);
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
-        sendTestData.addItem("Submit Test Data", true);
+        sendTestData.addItem("Submit Test Data", 3, true);
 
         HomeBox simulators = new HomeBox("Simulators");
         simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
 
         HomeBox mhdTools = new HomeBox("MHD Tools");
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
-        mhdTools.addItem("MHD Validator", false);
-        //mhdTools.addItem("MHD to XDS Converter", true);
+        mhdTools.addItem("MHD Validator", 3, false);
+        //mhdTools.addItem("MHD to XDS Converter", 3, true);
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         // Connectathon Validations
-        connectathonTools.addItem("XDS.b Doc Source Stores Document", true);
+        connectathonTools.addItem("XDS.b Doc Source Stores Document", 3,true);
         // Registry Validations
-        connectathonTools.addItem("XDS.b Registry Do This First", true);
-        connectathonTools.addItem("XDS.b Lifecycle", true);
-        connectathonTools.addItem("XDS.b Registry Folder Handling", true);
+        connectathonTools.addItem("XDS.b Registry Do This First", 3, true);
+        connectathonTools.addItem("XDS.b Lifecycle", 3, true);
+        connectathonTools.addItem("XDS.b Registry Folder Handling", 3, true);
         // Repository Validations
-        connectathonTools.addItem("XDS.b Repository Do This First", true);
+        connectathonTools.addItem("XDS.b Repository Do This First", 3, true);
 
         VStack vstack1 = new VStack();
         VStack vstack2 = new VStack();
