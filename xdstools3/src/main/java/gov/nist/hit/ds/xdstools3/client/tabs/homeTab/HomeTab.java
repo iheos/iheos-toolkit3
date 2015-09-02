@@ -6,6 +6,7 @@ import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.hit.ds.xdstools3.client.Xdstools3ActivityView;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
+import gov.nist.hit.ds.xdstools3.client.resources.Resources;
 import gov.nist.hit.ds.xdstools3.client.tabs.GenericTab;
 import gov.nist.hit.ds.xdstools3.client.util.injection.Xdstools3GinInjector;
 import gov.nist.toolkit.xdstools2.client.Xdstools2;
@@ -30,11 +31,12 @@ public class HomeTab extends GenericTab {
     protected HStack createContents(){
 
         HomeBox preConnectathonTools = new HomeBox("Pre-Connectathon Tools");
+        preConnectathonTools.setIcon(Resources.INSTANCE.getSettingsIcon().getSafeUri().asString());
         preConnectathonTools.addItem("Pre-Connectathon Tests", 3, true);
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
+        connectathonTools.setIcon(Resources.INSTANCE.getSettingsIcon().getSafeUri().asString());
         connectathonTools.addItem("Tests Overview", 3, true);
-        connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         // Connectathon Validations
         connectathonTools.addItem("XDS.b Doc Source Stores Document", 3,true);
         // Registry Validations
@@ -45,6 +47,7 @@ public class HomeTab extends GenericTab {
         connectathonTools.addItem("XDS.b Repository Do This First", 3, true);
 
         HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
+        queriesAndRetrieves.setIcon(Resources.INSTANCE.getTransferIcon().getSafeUri().asString());
        /* queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents", true);
         queriesAndRetrieves.addItem("MPQ Find Documents", true);
@@ -67,24 +70,25 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.addItem(TabLauncher.documentRetrieveTabLabel, 2, false);
 
         HomeBox tempDev = new HomeBox("Temporary Tabs & Long-Term Development");
-        tempDev.setIcon("icons/glyphicons/glyphicons_280_settings.png");
+        tempDev.setIcon(Resources.INSTANCE.getNotesIcon().getSafeUri().asString());
         tempDev.addItem("V2 Home", 2, false);
         tempDev.addItem("V2 Dynamic Tab", 2, false);
         tempDev.addItem("Test of Endpoint selection", 3, true);
         tempDev.addItem("Query - Retrieve - Submit", 3, true);
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
-        sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
+        sendTestData.setIcon(Resources.INSTANCE.getExportIcon().getSafeUri().asString());
         sendTestData.addItem("Submit Test Data", 3, true);
 
         HomeBox generateTestData = new HomeBox("Generate Test Data");
+        generateTestData.setIcon(Resources.INSTANCE.getEditIcon().getSafeUri().asString());
         generateTestData.addItem("XDS Document Entry Editor", 3, false);
 
         //HomeBox simulators = new HomeBox("Simulators");
-        //simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
+        // simulators.setIcon(Resources.INSTANCE.getDisplayIcon().getSafeUri().asString());
 
         HomeBox mhdTools = new HomeBox("MHD Tools");
-        mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
+        mhdTools.setIcon(Resources.INSTANCE.getIpadIcon().getSafeUri().asString());
         mhdTools.addItem("MHD Validator", 3, false);
         //mhdTools.addItem("MHD to XDS Converter", 3, true);
 
