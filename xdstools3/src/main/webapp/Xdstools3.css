@@ -383,9 +383,12 @@ footer ul li a:hover{
     font-weight:bold;
     padding-left:28px;
 }
-.under-construction-label{
-    font-style: italic;
-    color: orangered;
+.under-construction-homebox-label{
+     font-style: italic;
+     color: orangered;
+ }
+.version-homebox-label{
+    color: #1569C7;
 }
 
 

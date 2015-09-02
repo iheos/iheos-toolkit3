@@ -56,6 +56,7 @@ import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.GetRelatedDocumen
 import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.GetSubmissionSetAndContentsTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.queryRetrieveTabs.RetrieveDocumentsTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.SubmitTestDataTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab.TestStatusTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.V2HomeTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.DocRetrieveTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.v2Wrapper.qandr.FindDocumentsByRefIdTab;
@@ -424,6 +425,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         }
         else if(tabName.equals(TabNamesManager.getInstance().getQRSCombinedTabCode())){
             tab = new QueryRetrieveSubmitCombinedTab();
+        }
+        else if(tabName.equals(TabNamesManager.getInstance().getTestsOverviewTabCode())){
+            tab = new TestStatusTab();
         }
         else {
 

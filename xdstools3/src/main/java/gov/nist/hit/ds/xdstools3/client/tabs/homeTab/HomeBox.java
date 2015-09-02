@@ -35,24 +35,44 @@ public class HomeBox extends VStack {
      * @param isUnderConstruction Boolean indicating whether the tab being linked to is under construction.
      * @see HomeLinkButton
      */
-    public void addItem(String item_title, boolean isUnderConstruction){
+    public void addItem(String item_title, int version, boolean isUnderConstruction){
         HomeLinkButton button = new HomeLinkButton(item_title);
         button.setBaseStyle("home-button");
+        button.setWidth(250);
 
-        if (isUnderConstruction){
-            Label underConstructionLabel = new Label("Under construction");
-            underConstructionLabel.setWidth(150);
-            underConstructionLabel.setLayoutAlign(VerticalAlignment.CENTER);
-            underConstructionLabel.setStyleName("under-construction-label");
-            button.setWidth(280);
-            HStack stack = new HStack();
-            stack.setAutoHeight();
-            stack.addMembers(button, underConstructionLabel);
-            addMember(stack);
-        } else {
-            addMember(button);
-            button.setWidth(420);
+        // Horizontal stack to group all display elements for one link to a tool on the Home Page
+        HStack stack = new HStack();
+        stack.setAutoHeight();
+
+        stack.addMember(button);
+
+        switch(version){
+            case 2:  // do nothing when it is the old version number
+                break;
+            case 3:
+                // when the new version number is used, display a label
+                Label versionLabel = new Label("NEW");
+                versionLabel.setWidth(40);
+                versionLabel.setLayoutAlign(VerticalAlignment.CENTER);
+                versionLabel.setStyleName("version-homebox-label");
+
+                stack.addMember(versionLabel);
+                break;
+            default:
+                // do nothing when the version number was not filled out or is a random number
+                break;
         }
+        if (isUnderConstruction) {
+            Label underConstructionLabel = new Label("Under construction");
+            underConstructionLabel.setWidth(110);
+            underConstructionLabel.setLayoutAlign(VerticalAlignment.CENTER);
+            underConstructionLabel.setStyleName("under-construction-homebox-label");
+
+            stack.addMember(underConstructionLabel);
+        }
+
+        // Add link button to the HomeBox
+        addMember(stack);
     }
 
 }

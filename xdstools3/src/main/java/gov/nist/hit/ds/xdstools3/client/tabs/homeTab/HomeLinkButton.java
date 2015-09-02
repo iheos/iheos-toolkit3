@@ -58,20 +58,19 @@ public class HomeLinkButton extends IButton {
         bindUI();
     }
 
+    /**
+     * Opens a given tab after a click on the corresponding link on the Home page
+     * NB. syntax before TabPlaces was:
+     * Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
+     */
     private void bindUI() {
         // go to a new TabPlace on home's button click
         addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                // FIXME unsafe code if refactored
-                if (title == "Find Documents") {
-//                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsTabCode()));
-//                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
-
-                }
 
                 /* ************* begin v2 ************** */
 
-                else if (title.equals(TabLauncher.findDocumentsTabLabel))
+                if (title.equals(TabLauncher.findDocumentsTabLabel))
                      new FindDocumentsTab().onAbstractTabLoad(xdstools2, false, null);
                     // Use placeController to launch non-event based v2 tabs
                     // placeController.goTo(new TabPlace(TabLauncher.findDocumentsTabLabel));
@@ -102,7 +101,7 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMpqFindDocumentsTabCode()));
                 else if (title == "Message Validator")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMessageValidatorTabCode()));
-                else if (title == "Document Metadata Editor")
+                else if (title == "XDS Document Entry Editor")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()));
                 else if (title == "Pre-Connectathon Tests")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getPreConnectathonTestsTabCode()));
@@ -140,6 +139,8 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMhdtoXdsConverterTabCode()));
                 else if (title == "Query - Retrieve - Submit")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getQRSCombinedTabCode()));
+                else if (title == "Tests Overview")
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getTestsOverviewTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });
