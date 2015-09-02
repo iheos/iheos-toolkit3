@@ -1,16 +1,29 @@
 package gov.nist.hit.ds.xdstools3.server;
 
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.session.server.Session;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
+import gov.nist.hit.ds.xdstools3.client.exceptions.NoServletSessionException;
+import gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab.Test;
+import gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab.TestCollection;
 import gov.nist.hit.ds.xdstools3.shared.Site;
 import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.hit.ds.xdstools3.server.demo.ActorsCollectionsDataSamples;
 import gov.nist.hit.ds.xdstools3.server.demo.TestDataHelper;
+import gov.nist.toolkit.installation.Installation;
+import gov.nist.toolkit.results.client.Result;
+import gov.nist.toolkit.valregmsg.message.SchemaValidation;
 import org.apache.log4j.Logger;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,15 +43,16 @@ public class Caller implements Serializable {
     // Transaction name common to all MHD transactions
     private final String MHD_TRANSACTION_NAME = "pdb";
 
-    protected Caller(){
+    protected Caller() {
     }
 
     /**
      * Singleton method. Use this method to gain access to the functionality in this class.
+     *
      * @return Caller instance
      */
-    public static Caller getInstance(){
-        if (instance == null){
+    public static Caller getInstance() {
+        if (instance == null) {
             instance = new Caller();
         }
         return instance;
@@ -57,13 +71,15 @@ public class Caller implements Serializable {
 
 
     // ------------------ Administrator functionality --------------------
+
     /**
      * Login as admin
+     *
      * @param password the admin password
      */
-    public boolean logMeIn(String password){
+    public boolean logMeIn(String password) {
         String pwd = Toolkit.getPassword();
-        if (password.equals(pwd)){
+        if (password.equals(pwd)) {
             logger.info("User logged in as admin.");
             return true;
         }
@@ -72,9 +88,10 @@ public class Caller implements Serializable {
 
     /**
      * Saves the application settings as defined by the administrator(s)
+     *
      * @param settings Table of settings: host, port, tls_port, cache, environment, gazelleURL
      */
-    public void saveAdminSettings(String[] settings){
+    public void saveAdminSettings(String[] settings) {
         // TODO save admin settings to back-end
         Toolkit.saveProperties(Toolkit.getToolkitPropertiesFile());
         System.out.println("Admin settings were saved");
@@ -82,23 +99,25 @@ public class Caller implements Serializable {
 
     /**
      * Changes the administrator password.
+     *
      * @param oldPassword
      * @param newPassword
      */
-    public void saveAdminPassword(String oldPassword, String newPassword){
+    public void saveAdminPassword(String oldPassword, String newPassword) {
         // TODO save admin password to back-end if oldPassword is correct
         System.out.println("Admin password was saved");
     }
 
     /**
      * Retrieves the Toolkit / Admin settings from the back-end
+     *
      * @return Table of settings: host, port, tls_port, external cache location, default environment, gazelle URL
      */
-    public String[] retrieveAdminSettings(){
+    public String[] retrieveAdminSettings() {
         //TODO missing the location of external cache
         String[] currentAdminParams = {Toolkit.getHost(), Toolkit.getPort(), Toolkit.getTlsPort(),
                 "ext_cache_location", Toolkit.getDefaultEnvironmentName(), Toolkit.getGazelleConfigURL()};
-        //String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"}; // test data
+        //String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"}; // te3.0.3a - NA 2015st data
         logger.info("Retrieved from back-end (API Toolkit) the following parameters: "
                 + "host, port, TLS port, external cache location, default environment, gazelle URL.");
         return currentAdminParams;
@@ -109,9 +128,10 @@ public class Caller implements Serializable {
 
     /**
      * Sets the list of environments
+     *
      * @return the list of available environments
      */
-    public String[] retrieveEnvironments(){
+    public String[] retrieveEnvironments() {
         String[] envs = Toolkit.getEnvironmentNames().toArray(new String[0]);
         logger.info("Retrieved the list of environments.");
         // String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"}; // test data
@@ -128,6 +148,7 @@ public class Caller implements Serializable {
 
     /**
      * Sets the list of test sessions
+     *
      * @return the list of test sessions
      */
     public String[] retrieveTestSessions() {
@@ -135,8 +156,7 @@ public class Caller implements Serializable {
         try {
             logger.info("Retrieved the list of user session names.");
             return Toolkit.getUserSessions().toArray(new String[0]);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             logger.info("No user session names are registered.");
             return new String[]{};
         }
@@ -146,10 +166,11 @@ public class Caller implements Serializable {
      * Registers a new session name and perpetuates the change to the back-end.
      * Retrieving the new list of sessions is done from inside the service
      * implementation ToolbarServiceImpl.
+     *
      * @param sessionName New session name entered by the user
      * @see gov.nist.hit.ds.xdstools3.server.RPCServices.ToolbarServiceImpl
      */
-    public void addTestSession(String sessionName){
+    public void addTestSession(String sessionName) {
         Toolkit.addUserSession(sessionName);
     }
 
@@ -157,6 +178,7 @@ public class Caller implements Serializable {
      * Deletes a user session and perpetuates the change to the back-end.
      * Retrieving the new list of sessions is done from inside the service
      * implementation ToolbarServiceImpl.
+     *
      * @param sessionName
      * @see gov.nist.hit.ds.xdstools3.server.RPCServices.ToolbarServiceImpl
      */
@@ -165,15 +187,14 @@ public class Caller implements Serializable {
     }
 
 
-
     // --------------------- Actors and Collections ---------------------
 
-    public Map<String, String> getCollectionNames(String collectionSetName) throws Exception  {
+    public Map<String, String> getCollectionNames(String collectionSetName) throws Exception {
         return ActorsCollectionsDataSamples.instance.getCollectionNames(collectionSetName);
     }
 
     public Map<String, String> getCollection(String collectionSetName, String collectionName) {
-        return ActorsCollectionsDataSamples.instance.getCollection(collectionSetName,collectionName);
+        return ActorsCollectionsDataSamples.instance.getCollection(collectionSetName, collectionName);
     }
 
     public String getTestReadme(String test) {
@@ -181,23 +202,21 @@ public class Caller implements Serializable {
     }
 
 
-
-
     // ----------------------------- MHD -------------------------------
 
     /**
      * Calls validation on an MHD message
+     *
      * @param messageType the type of MHD message being uploaded
      * @param filecontent MHD message contents
-     *
      * @return an Asset (= validation result) as handled by the repository / LogBrowser
      */
     public AssetNode validateMHDMessage(String messageType, String filecontent) throws ToolkitServerError {
         //if (messageType == "Submit") {
         AssetNode validationResult = api.validateRequest(MHD_TRANSACTION_NAME, filecontent);
         logger.info("Received AssetNode with parameters AssetId: " + validationResult.getAssetId()
-                +", AssetType: "+ validationResult.getType()
-        +", RepositoryId: "+ validationResult.getRepId());
+                + ", AssetType: " + validationResult.getType()
+                + ", RepositoryId: " + validationResult.getRepId());
         return validationResult;
         //} // end submit
         // else throw new unsupportedmessagetypeexception
@@ -206,9 +225,10 @@ public class Caller implements Serializable {
 
     /**
      * Converts a MHD file into an XDS file
+     *
      * @param uploadedFileContents the contents as a String of the MHD file uploaded by the user
-     * @param location the location of the file. This is the "rootDirPath" parameter that originates from the
-     *                 upload servlet. I do not know if we need this. -Diane
+     * @param location             the location of the file. This is the "rootDirPath" parameter that originates from the
+     *                             upload servlet. I do not know if we need this. -Diane
      * @return
      */
     public AssetNode convertMHDtoXDS(String location, String uploadedFileContents) {
@@ -217,12 +237,11 @@ public class Caller implements Serializable {
         // inside a popup window. This should go away when the actual conversion is linked from the backend.
         AssetNode validationResult = api.validateRequest(MHD_TRANSACTION_NAME, uploadedFileContents);
         logger.info("Received AssetNode with parameters AssetId: " + validationResult.getAssetId()
-                +", AssetType: "+ validationResult.getType()
-                +", RepositoryId: "+ validationResult.getRepId());
+                + ", AssetType: " + validationResult.getType()
+                + ", RepositoryId: " + validationResult.getRepId());
         return validationResult;
 //        return saveTempFileService.saveAsXMLFile(uploadedFileContents);
     }
-
 
 
     // ----------------------------- Submit Test Data -------------------------------
@@ -230,10 +249,11 @@ public class Caller implements Serializable {
     /**
      * Retrieves all the available test data sets for a given type of test data.
      * This is for now used in the Submit Test Data tab.
+     *
      * @param testDataType type of test data
      * @return all the matching test data sets
      */
-    public Map<String,String> retrieveTestDataSet(String testDataType) {
+    public Map<String, String> retrieveTestDataSet(String testDataType) {
         return TestDataHelper.instance.getTestDataSet();
     }
 
@@ -251,6 +271,7 @@ public class Caller implements Serializable {
 
     /**
      * Retrieve the full list of sites with their data
+     *
      * @return
      */
     public Sites retrieveSites() {
@@ -296,6 +317,17 @@ public class Caller implements Serializable {
         return new Site();
     }
 
-}
 
+    // ----------------------------- Tests Overview -------------------------------
+
+    // Returns a Map of test results based on the test ID and current session
+/*    public Map<String, Result> getTestResults(List<String> testIds, String testSession)
+            throws NoServletSessionException {
+        // return session().xdsTestServiceManager().getTestResults(testIds, testSession);
+        // for ex. use Session.getsession(sessionId)
+
+        return null;
+    }*/
+
+}
 

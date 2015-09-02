@@ -57,11 +57,11 @@
 	<!--  this is for the gwt rpc -->
 	<servlet-mapping>
 		<servlet-name>repositoryServlet</servlet-name>
-		<url-pattern>/logBrowser/repository</url-pattern>
+		<url-pattern>/browser/repository</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 	  <servlet-name>jUnitHostImpl</servlet-name>
-	  <url-pattern>/logBrowser/junithost/*</url-pattern>
+	  <url-pattern>/browser/junithost/*</url-pattern>
 	</servlet-mapping>
 	
   <!-- Default page to serve -->

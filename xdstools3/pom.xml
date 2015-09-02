@@ -18,6 +18,7 @@
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <gwt.style>DETAILED</gwt.style>
     </properties>
 
 
@@ -98,6 +99,10 @@
             <artifactId>common-datatypes</artifactId>
         </dependency>
         <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>results</artifactId>
+        </dependency>
+        <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>toolkit</artifactId>
         </dependency>
@@ -127,6 +132,33 @@
             <scope>compile</scope>
         </dependency>
         <!-- end repository related -->
+
+        <!-- begin v2 gui -->
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>xdstools2</artifactId>
+            <version>2.202.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>xdstools2</artifactId>
+            <version>2.202.0-SNAPSHOT</version>
+            <classifier>sources</classifier>
+            <scope>compile</scope>
+        </dependency>
+        <!-- end v2 gui -->
+
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+            <version>1.2.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-impl</artifactId>
+            <version>1.2.10</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -171,18 +203,31 @@
 
                 </executions>
                 <configuration>
-                    <!-- begin repository related -->
                     <compileSourcesArtifacts>
+                        <!-- begin repository related -->
                         <compileSourcesArtifact>gov.nist.hit.ds:repository-rpc</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.hit.ds:repository-shared</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.hit.ds:repository-widgets-ui</compileSourcesArtifact>
+                        <!-- end repository related -->
+                        <!-- begin v2 -->
+                        <compileSourcesArtifact>gov.nist.toolkit:tk</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:results</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:actor-transaction</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:site-management</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:registry-metadata</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:http</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:validators-support</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:actorfactory</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:sim-common</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:error-recording</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.toolkit:common-datatypes</compileSourcesArtifact>
+                        <!-- end -->
                     </compileSourcesArtifacts>
-                    <!-- end repository related -->
-
                     <runTarget>Xdstools3.html</runTarget>
                     <modules>
                         <module>${project.groupId}.xdstools3.Xdstools3</module>
                     </modules>
+                    <extraJvmArgs>-XX:MaxPermSize=512m -Xmx1024m</extraJvmArgs>
                 </configuration>
             </plugin>
 

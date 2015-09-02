@@ -10,6 +10,11 @@ public class FakeData {
 
     public Record createRecord(String testNumber, String sectionNumber){
         ListGridRecord record = new ListGridRecord();
+        if (testNumber.equals("11012")){
+            record.setCanExpand(true);
+        } else {
+            record.setCanExpand(false);
+        }
         String testReference = testNumber.concat(sectionNumber);
         record.setAttribute("testNumber", testNumber);
         record.setAttribute("sectionNumber", sectionNumber);
@@ -18,6 +23,7 @@ public class FakeData {
         record.setAttribute("commands", "");
         record.setAttribute("time","04:10 PM EST");
         record.setAttribute("testStatus","");
+
         return record;
     }
 

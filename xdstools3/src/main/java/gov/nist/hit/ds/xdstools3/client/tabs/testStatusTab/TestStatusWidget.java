@@ -1,30 +1,45 @@
 package gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.GroupStartOpen;
+import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.ImgButton;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
-import com.smartgwt.client.widgets.layout.HLayout;
-import com.smartgwt.client.widgets.layout.SectionStack;
-import com.smartgwt.client.widgets.layout.SectionStackSection;
-import com.smartgwt.client.widgets.layout.VLayout;
+import com.smartgwt.client.widgets.layout.*;
+import gov.nist.hit.ds.xdstools3.client.exceptions.NoServletSessionException;
 import gov.nist.hit.ds.xdstools3.client.resources.Resources;
+import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.TestDataSubmissionServices;
+import gov.nist.hit.ds.xdstools3.client.tabs.submitTestDataTab.TestDataSubmissionServicesAsync;
+import gov.nist.toolkit.results.client.Result;
 
-import javax.swing.*;
+import java.util.Map;
+
 
 /**
  * Created by Diane Azais local on 7/23/2015.
  */
-public class TestStatusWidget extends SectionStack {
+public class TestStatusWidget extends VStack {
+
+    // RPC Services declaration
+    private final static TestStatusTabServiceAsync testStatusTabService = GWT.create(TestStatusTabService.class);
+
 
     public TestStatusWidget(){
-
         setWidth100();
-        setHeight(300);
+        setHeight100();
+
+        SectionStack testStatusStack = new SectionStack();
+        testStatusStack.setVisibilityMode(VisibilityMode.MULTIPLE);
+        testStatusStack.setWidth100();
+        testStatusStack.setHeight(300);
 
         // Tests statistics header bar
         String tab = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"; // This is a workaround for GWT not accepting tabulations
@@ -62,24 +77,30 @@ public class TestStatusWidget extends SectionStack {
 
 
                     ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test (overwrites existing results)");
-                    // runImg.addClickHandler(new ClickHandler() {
-                    //     public void onClick(ClickEvent event) {
-                    //         SC.say("Edit Comment Icon Clicked for country : " + record.getAttribute("countryName"));//    }
-                    // });
 
                     ImgButton deleteImg = createSmallIcon(Resources.INSTANCE.getRemoveIcon().getSafeUri().asString(), "Delete test results");
-                    //chartImg.addClickHandler(new ClickHandler() {
-                    //    public void onClick(ClickEvent event) {
-                    //        SC.say("Chart Icon Clicked for country : " + record.getAttribute("countryName"));
-                    //    }
-                    // });
 
                     IButton testPlanButton =  createSmallButton("Test Plan", "Display the test plan in a new tab", 60);
-
+                    testPlanButton.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent clickEvent) {
+                            Window.open("", "", "");
+                        }
+                    });
                     IButton logButton =  createSmallButton("Log", "Display the log file in a new tab ", 40);
-
-                    IButton testDescrButton =  createSmallButton("Full Test Description", "Display the full test description in a new tab ", 120);
-
+                    logButton.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent clickEvent) {
+                            Window.open("", "", "");
+                        }
+                    });
+                    IButton testDescrButton =  createSmallButton("Test Description", "Display the full test description in a new tab ", 100);
+                    testDescrButton.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent clickEvent) {
+                            Window.open("", "", "");
+                        }
+                    });
                     commandsCanvas.addMembers(runImg, deleteImg, testPlanButton, logButton, testDescrButton);
                     return commandsCanvas;
 
@@ -117,7 +138,19 @@ public class TestStatusWidget extends SectionStack {
                             ImgButton runImg = createSmallIcon(Resources.INSTANCE.getPlayIcon().getSafeUri().asString(), "Run test section (overwrites existing results)");
                             ImgButton deleteImg = createSmallIcon(Resources.INSTANCE.getRemoveIcon().getSafeUri().asString(), "Delete results for this test section");
                             IButton testPlanButton =  createSmallButton("Test Plan", "Display the test plan in a new tab", 60);
+                            testPlanButton.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent clickEvent) {
+                                    Window.open("", "", "");
+                                }
+                            });
                             IButton logButton =  createSmallButton("Log", "Display the log file in a new tab ", 40);
+                            logButton.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent clickEvent) {
+                                    Window.open("", "", "");
+                                }
+                            });
                             commandsCanvas.addMembers(runImg, deleteImg, testPlanButton, logButton);
                             return commandsCanvas;
 
@@ -163,6 +196,7 @@ public class TestStatusWidget extends SectionStack {
 
             };
 
+        // Define characteristics of main grid
         grid.setShowAllRecords(true);
         grid.setLeaveScrollbarGap(false);
         grid.setShowRecordComponents(true);
@@ -186,16 +220,32 @@ public class TestStatusWidget extends SectionStack {
         grid.setFields(testNumber, testDescription, commands, time, testStatus, sectionNumber, testReference);
 
         // Add components
-        buttonSection.setItems(grid);
-        setSections(statsSection, buttonSection);
-
-        // Prepare components for display
+        buttonSection.addItem(grid);
+        testStatusStack.setSections(statsSection, buttonSection);
+        addMember(testStatusStack);
         grid.draw();
 
-        // Populate the grid with test data
-        FakeData bogusDataGenerator = new FakeData();
-        grid.addData(bogusDataGenerator.createRecord("11011", ""));
-        grid.addData(bogusDataGenerator.createRecord("11012", ""));
+        // Populate the grid
+       // FakeData bogusDataGenerator = new FakeData();
+       // grid.addData(bogusDataGenerator.createRecord("11011", ""));
+        //grid.addData(bogusDataGenerator.createRecord("11012", ""));
+
+    /*    try {
+            testStatusTabService.retrieveAllTests(new AsyncCallback<Map<String, Result>>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onSuccess(Map<String, Result> testTestCollection) {
+
+                }
+            });
+        } catch (NoServletSessionException e) {
+            e.printStackTrace();
+        }
+        */
     }
 
     /**

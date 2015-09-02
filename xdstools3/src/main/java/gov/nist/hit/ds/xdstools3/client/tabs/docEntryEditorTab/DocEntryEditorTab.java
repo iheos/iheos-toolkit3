@@ -6,7 +6,7 @@ import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 import gov.nist.hit.ds.xdstools3.client.tabs.GenericCloseableTab;
 
 public class DocEntryEditorTab extends GenericCloseableTab {
-    static String header = "Document Metadata Editor";
+    static String header = "XDS Document Entry Editor";
 
     public DocEntryEditorTab() {
         super(header);
