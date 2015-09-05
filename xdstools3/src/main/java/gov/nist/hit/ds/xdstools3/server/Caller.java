@@ -1,29 +1,16 @@
 package gov.nist.hit.ds.xdstools3.server;
 
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
-import gov.nist.hit.ds.session.server.Session;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
-import gov.nist.hit.ds.xdstools3.client.exceptions.NoServletSessionException;
-import gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab.Test;
-import gov.nist.hit.ds.xdstools3.client.tabs.testStatusTab.TestCollection;
-import gov.nist.hit.ds.xdstools3.shared.Site;
+import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.hit.ds.xdstools3.server.demo.ActorsCollectionsDataSamples;
 import gov.nist.hit.ds.xdstools3.server.demo.TestDataHelper;
-import gov.nist.toolkit.installation.Installation;
-import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.valregmsg.message.SchemaValidation;
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**

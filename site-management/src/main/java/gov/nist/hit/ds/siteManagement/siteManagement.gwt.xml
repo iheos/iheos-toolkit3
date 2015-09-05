@@ -5,4 +5,7 @@
 <module>
     <inherits name='com.google.gwt.user.User' /> 
     <source path="client" />
+    <source path="loader" />
+    <source path="repository" />
+
 </module>

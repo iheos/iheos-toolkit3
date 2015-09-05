@@ -2,7 +2,7 @@ package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.config
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import gov.nist.hit.ds.xdstools3.shared.Site;
+import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.dialogs.PopupMessageV3;
 
 /**Singleton that contains the data to populate each nested form of the Site Config Widget.

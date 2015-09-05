@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import gov.nist.hit.ds.xdstools3.shared.Site;
+import gov.nist.toolkit.sitemanagement.client.Site;
 
 /**
  * Client side of the GWT RPC mechanism. This is the asynchronous interface.

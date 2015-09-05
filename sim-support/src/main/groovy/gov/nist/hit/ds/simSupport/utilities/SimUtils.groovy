@@ -26,7 +26,6 @@ import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import gov.nist.hit.ds.xdsExceptions.ToolkitException
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
-import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 import org.apache.log4j.Logger
 

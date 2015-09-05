@@ -7,7 +7,6 @@ import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
-import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 
 /**

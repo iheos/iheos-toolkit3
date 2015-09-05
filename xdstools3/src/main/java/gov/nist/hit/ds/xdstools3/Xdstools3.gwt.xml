@@ -27,9 +27,8 @@
 
 
     <!-- ================= Inherit v3 modules ================= -->
-    <!-- begin repository related -->
     <inherits name='gov.nist.hit.ds.repository.ui.RepositoryWidgetsUI' />
-    <!-- end repository related -->
+    <inherits name="gov.nist.toolkit.results.results"/>
 
     <!-- ================= Inherit v2 module ================= -->
     <inherits name='gov.nist.toolkit.xdstools2.Xdstools2_NOEP' />
@@ -51,7 +50,6 @@
 
     <!-- ======================= GWT logging ======================= -->
      <inherits name="com.google.gwt.logging.Logging"/>
-    <inherits name="gov.nist.toolkit.results.results"/>
     <set-property name="gwt.logging.logLevel" value="INFO"/>
      <set-property name="gwt.logging.enabled" value="TRUE"/>
      <set-property name="gwt.logging.popupHandler" value="DISABLED" />
