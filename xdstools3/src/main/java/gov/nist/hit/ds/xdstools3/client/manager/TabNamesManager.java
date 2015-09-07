@@ -26,9 +26,9 @@ public class TabNamesManager {
     private final String v2HomeTabCode = "V2_HOME";
     private final String v2DynamicTabCode = "V2_DYNAMIC_TAB";
     private final String mpqFindDocumentsTabCode = "MPQ_FIND_DOCUMENTS";
-    private final String messageValidatorTabCode = "MESSAGE_VALIDATOR";
     private final String adminTabCode = "ADMIN";
     private final String endpointsTabCode = "ENDPOINTS";
+    private final String endpointsSelectionTabCode = "ENDPOINTS_SELECTION_TEST";
     private final String preConnectathonTestsTabCode = "PRE_CONNECTATHON";
     private final String documentMetadataEditorTabCode = "METADATA_EDITOR";
     private final String getDocumentsCode = "GET_DOCUMENTS";
@@ -73,7 +73,7 @@ public class TabNamesManager {
     public String getMpqFindDocumentsTabCode() {
         return mpqFindDocumentsTabCode;
     }
-    public String getMessageValidatorTabCode() { return messageValidatorTabCode; }
+    public String getEndpointsSelectionTabCode() { return endpointsSelectionTabCode; }
     public String getDocumentMetadataEditorTabCode() { return documentMetadataEditorTabCode; }
     public String getPreConnectathonTestsTabCode() { return preConnectathonTestsTabCode; }
     public String getGetDocumentsTabCode() { return getDocumentsCode; }
