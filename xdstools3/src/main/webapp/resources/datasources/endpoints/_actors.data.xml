@@ -5,4 +5,13 @@
     <site>
         <siteName>connect3.3_AMAZON</siteName>
     </site>
+    <site>
+        <siteName>EHR_DEDALUS_2014</siteName>
+    </site>
+    <site>
+        <siteName>EHR_ITH-ICOSERVE_sense</siteName>
+    </site>
+    <site>
+        <siteName>EHR_Tiani - Cisco_SpiritEHR</siteName>
+    </site>
 </sites>

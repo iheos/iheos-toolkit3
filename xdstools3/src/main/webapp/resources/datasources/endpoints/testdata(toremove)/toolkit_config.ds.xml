@@ -1,7 +1,0 @@
-      <DataSource ID="toolkit_config"
-        serverConstructor="gov.nist.toolkit.xdstools3.server.customDataSources.ToolkitConfigDS">
-          <fields>
-              <field name="username" type="text" title="Username" required="true">admin</field>
-              <field name="password" type="text" title="Password" required="true">money</field>
-          </fields>
-      </DataSource>

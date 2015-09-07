@@ -5,7 +5,7 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.form.ValuesManager;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.sitemanagement.client.Site;
+import gov.nist.hit.ds.siteManagement.loader.Sites;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class SiteWidget extends VLayout {
         // todo this needs to be made into a factory to return one class per nested endpoint
         // TODO the field and map codes are the same, they may be better managed through a utility class...
         try {
-            Site site = SiteWidgetData.getInstance().getData();
+            Sites sitesMap = SiteWidgetData.getInstance().getData();
             manager.getItem("rtls").setValue("test"); // todo retrieve from the map by object key
             //dataMap.get("rtls")
         } catch(Exception e){

@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.xdstools3.server.RPCServices;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gov.nist.toolkit.sitemanagement.client.Site;
+import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointService;
 import gov.nist.hit.ds.xdstools3.server.Caller;
 
@@ -25,7 +25,7 @@ public class EndpointImpl extends RemoteServiceServlet implements EndpointServic
     }*/
 
     @Override
-    public Site retrieveSiteAttributes() {
+    public Sites retrieveSiteAttributes() {
         return Caller.getInstance().retrieveSiteAttributes();
     }
 }

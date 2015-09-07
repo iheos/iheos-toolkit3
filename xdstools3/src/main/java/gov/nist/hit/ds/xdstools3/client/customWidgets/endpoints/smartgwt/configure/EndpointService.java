@@ -2,7 +2,7 @@ package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.config
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import gov.nist.toolkit.sitemanagement.client.Site;
+import gov.nist.hit.ds.siteManagement.loader.Sites;
 
 /**
  * Client side of the GWT RPC mechanism. This is the service class.
@@ -15,7 +15,7 @@ import gov.nist.toolkit.sitemanagement.client.Site;
 public interface EndpointService extends RemoteService {
 
    // public Sites retrieveSites();
-    public Site retrieveSiteAttributes();
+    public Sites retrieveSiteAttributes();
 
     // void retrieveSites(AsyncCallback<Sites> async);
 }

@@ -1,5 +1,0 @@
-
-<SimConfig>
-<ENDPOINT name="rb" isSecure="false" value="http://localhost:8080/simwar/123/reg/rb"/>
-<ENDPOINT name="rb" isSecure="true" value="https://localhost:8080/simwar/123/reg/rb"/>
-</SimConfig>

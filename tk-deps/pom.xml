@@ -102,6 +102,7 @@
                 <version>2.202.0-SNAPSHOT</version>
             </dependency>
 
+
             <!-- Internal Jars
             The versions specified here are the ones depended on
             for building the entire toolkit.  Individual
@@ -196,6 +197,13 @@
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>site-management</artifactId>
                 <version>3.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>site-management</artifactId>
+                <version>3.1.0-SNAPSHOT</version>
+                <classifier>sources</classifier>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>

@@ -118,6 +118,12 @@
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>site-management</artifactId>
         </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>site-management</artifactId>
+            <classifier>sources</classifier>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- begin repository related -->
         <dependency>
@@ -127,7 +133,6 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>
-            <!-- for some reason, the source classifier requires an explicit version -->
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>
@@ -213,7 +218,6 @@
                         <compileSourcesArtifact>gov.nist.toolkit:tk</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.toolkit:results</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.toolkit:actor-transaction</compileSourcesArtifact>
-                        <compileSourcesArtifact>gov.nist.toolkit:site-management</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.toolkit:registry-metadata</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.toolkit:http</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.toolkit:validators-support</compileSourcesArtifact>
@@ -221,6 +225,9 @@
                         <compileSourcesArtifact>gov.nist.toolkit:sim-common</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.toolkit:error-recording</compileSourcesArtifact>
                         <compileSourcesArtifact>gov.nist.toolkit:common-datatypes</compileSourcesArtifact>
+                        <!-- end -->
+                        <!-- begin v3 -->
+                        <compileSourcesArtifact>gov.nist.hit.ds:site-management</compileSourcesArtifact>
                         <!-- end -->
                     </compileSourcesArtifacts>
                     <runTarget>Xdstools3.html</runTarget>

@@ -98,7 +98,7 @@ public class EndpointConfigWidget extends VStack {
         IButton discardButton = new IButton("Discard changes");
         discardButton.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                //nestedGrid.discardAllEdits();
+                //TODO discard changes when adding site
             }
         });
         buttonsLayout.addMember(discardButton);

@@ -28,11 +28,11 @@
 
     <!-- ================= Inherit v3 modules ================= -->
     <inherits name='gov.nist.hit.ds.repository.ui.RepositoryWidgetsUI' />
-    <inherits name="gov.nist.toolkit.results.results"/>
+    <inherits name="gov.nist.hit.ds.siteManagement.SiteManagement"/>
 
     <!-- ================= Inherit v2 module ================= -->
     <inherits name='gov.nist.toolkit.xdstools2.Xdstools2_NOEP' />
-
+    <inherits name="gov.nist.toolkit.results.results"/>
 
     <!-- ============ Specify the app entry point class ============== -->
     <entry-point class="gov.nist.hit.ds.xdstools3.client.Xdstools3EP" />
