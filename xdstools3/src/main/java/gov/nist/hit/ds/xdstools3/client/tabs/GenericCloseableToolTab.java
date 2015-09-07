@@ -23,7 +23,7 @@ public abstract class GenericCloseableToolTab extends GenericCloseableTab implem
     private HLayout topPanel = new HLayout();  // contains contentsPanel and resultsPanel
     private VLayout contentsPanel = new VLayout(10); // form contents
     private VLayout resultsPanel; // bottom label
-    private Label headerLabel = new Label();
+    private Label headerLabel; // title label
     private HLayout titleAndHelpButton = new HLayout();
     private HelpButton helpButton;
     private EventAggregatorWidget eventMessageAggregatorWidget;
@@ -58,27 +58,6 @@ public abstract class GenericCloseableToolTab extends GenericCloseableTab implem
     @Override
     public VLayout getContentsPanel() {
         return contentsPanel;
-    }
-
-
-    /**
-     * This is the title of the tab, displayed in large characters at the top of the tab
-     * @param s the title or header of the tab
-     */
-    @Override
-    public void setHeader(String s){
-        // create the header of the tab
-        headerLabel = Formatter.createTabHeader(s);
-
-        // add a spacer to separate the title from the help button
-        LayoutSpacer spacer = new LayoutSpacer();
-        spacer.setHeight(30);
-
-        // add components to main contentsPanel
-        titleAndHelpButton.addMembers(headerLabel, spacer);
-        titleAndHelpButton.setHeight(30);
-        mainPanel.addMember(titleAndHelpButton);
-        setPane(mainPanel);
     }
 
 
@@ -179,6 +158,26 @@ public abstract class GenericCloseableToolTab extends GenericCloseableTab implem
      * @return tab's name
      */
     protected abstract String setTabName();
+
+    /**
+     * This is the title of the tab, displayed in large characters at the top of the tab. The intent is that a developer
+     * can call this function if they wish to display a title at the top of the tab they are working on.
+     * @param s the title or header of the tab
+     */
+    public void setHeader(String s){
+        // create the header of the tab
+        headerLabel = Formatter.createTabHeader(s);
+
+        // add a spacer to separate the title from the help button
+        LayoutSpacer spacer = new LayoutSpacer();
+        spacer.setHeight(30);
+
+        // add components to main contentsPanel
+        titleAndHelpButton.addMembers(headerLabel, spacer);
+        titleAndHelpButton.setHeight(30);
+        mainPanel.addMember(titleAndHelpButton);
+        setPane(mainPanel);
+    }
 
 
     /**

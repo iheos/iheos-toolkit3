@@ -12,7 +12,7 @@ import gov.nist.hit.ds.xdstools3.client.tabs.GenericCloseableToolTab;
 
 import java.util.logging.Logger;
 
-public class TestStatusTab extends GenericCloseableTab {
+public class TestStatusTab extends GenericCloseableToolTab {
     static final Logger logger = Logger.getLogger(TestStatusTab.class.getName());
 
 
@@ -21,15 +21,16 @@ public class TestStatusTab extends GenericCloseableTab {
 
     public TestStatusTab() {
         super(header);
+        getResultsPanel().setVisible(false);
 
         // create a VStack to store the entire contents of the tab
-        VStack contents = new VStack();
-        contents.setWidth(1185);
+      //  VStack contents = new VStack();
+       // contents.setWidth(1185);
 
         // create a stack with collapsible sections and populate it with the different widgets
         /*
         final SectionStack tabSections = new SectionStack();
-        tabSections.setVisibilityMode(VisibilityMode.MULTIPLE);
+        tabSections.setVisibilityMode(VisibilitoyMode.MULTIPLE);
 
         SectionStackSection sitesSection = new SectionStackSection("Sites");
         sitesSection.setExpanded(true);
@@ -49,11 +50,18 @@ public class TestStatusTab extends GenericCloseableTab {
         contents.addMember(tabSections);
         */
 
-        contents.addMember(new TestStatusWidget());
-        setPane(contents);
+        //contents.addMember(new TestStatusWidget());
+       // setPane(contents);
     }
 
 
+    @Override
+    protected Widget createContents() {
+        VStack contents = new VStack();
+        contents.setWidth(1140);
+        contents.addMember(new TestStatusWidget());
+        return contents;
+    }
 
     @Override
     protected String setTabName() {
