@@ -9,11 +9,11 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointDS;
 
-public class MessageValidatorTab extends GenericCloseableToolTab {
-    private static String title = "Message Validator";
+public class EndpointsSelectionTestTab extends GenericCloseableToolTab {
+    private static String title = "Endpoint Selection Test";
 
 
-    public MessageValidatorTab() {
+    public EndpointsSelectionTestTab() {
         super(title);
     }
 
@@ -46,7 +46,7 @@ public class MessageValidatorTab extends GenericCloseableToolTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesManager.getInstance().getMessageValidatorTabCode();
+        return TabNamesManager.getInstance().getEndpointsSelectionTabCode();
     }
 
 }

@@ -94,13 +94,15 @@ public class HomeLinkButton extends IButton {
                     new DocRetrieveTab().onAbstractTabLoad(xdstools2, false, null);
                 else if (title == "V2 Home")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getV2HomeTabCode()));
+                else if (title == "V2 Dynamic Tab")
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getV2DynamicTabCode()));
 
                 /* ************* end v2 ************** */
 
                 else if (title == "MPQ Find Documents")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMpqFindDocumentsTabCode()));
-                else if (title == "Message Validator")
-                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMessageValidatorTabCode()));
+                else if (title == "Endpoint Selection Test")
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getEndpointsSelectionTabCode()));
                 else if (title == "XDS Document Entry Editor")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()));
                 else if (title == "Pre-Connectathon Tests")

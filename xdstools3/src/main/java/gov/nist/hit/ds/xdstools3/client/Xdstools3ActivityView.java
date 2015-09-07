@@ -32,7 +32,7 @@ import gov.nist.hit.ds.xdstools3.client.tabs.GenericTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.GenericTabSet;
 import gov.nist.hit.ds.xdstools3.client.tabs.HelpTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.MPQTab.MPQTab;
-import gov.nist.hit.ds.xdstools3.client.tabs.MessageValidatorTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.EndpointsSelectionTestTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.QRSCombinedTab.QueryRetrieveSubmitCombinedTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.FolderValidationTab;
@@ -360,8 +360,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         else if (tabName.equals(TabNamesManager.getInstance().getMpqFindDocumentsTabCode())) {
             tab = new MPQTab();
         }
-        else if (tabName.equals(TabNamesManager.getInstance().getMessageValidatorTabCode())) {
-            tab = new MessageValidatorTab();
+        else if (tabName.equals(TabNamesManager.getInstance().getEndpointsSelectionTabCode())) {
+            tab = new EndpointsSelectionTestTab();
         }
         else if (tabName.equals(TabNamesManager.getInstance().getPreConnectathonTestsTabCode())) {
             tab = new PreConnectathonTestsTab();
@@ -535,7 +535,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "</li>" +
                 "<li><a href='#'>TOOLS</a>" +
                 "<ul>" +
-                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getEndpointsSelectionTabCode()+"'>Message Validator</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()+"'>Document Metadata Editor</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getPreConnectathonTestsTabCode()+"'>Pre-Connectathon Tests</a></li>" +
                 "</ul>" +

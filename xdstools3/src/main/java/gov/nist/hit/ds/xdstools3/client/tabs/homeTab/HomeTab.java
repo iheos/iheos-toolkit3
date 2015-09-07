@@ -73,7 +73,7 @@ public class HomeTab extends GenericTab {
         tempDev.setIcon(Resources.INSTANCE.getNotesIcon().getSafeUri().asString());
         tempDev.addItem("V2 Home", 2, false);
         tempDev.addItem("V2 Dynamic Tab", 2, false);
-        tempDev.addItem("Test of Endpoint selection", 3, true);
+        tempDev.addItem("Endpoint Selection Test", 3, true);
         tempDev.addItem("Query - Retrieve - Submit", 3, true);
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
